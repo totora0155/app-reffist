@@ -179,7 +179,7 @@ const template = [
         submenu: menuDevice,
       },
       {
-        label: 'Resize',
+        label: 'Zoom',
         submenu: menuResize,
       },
     ]
