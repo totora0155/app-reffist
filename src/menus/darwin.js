@@ -138,10 +138,21 @@ const template = [
     label: 'Reffist',
     submenu: [
       {
+        label: 'About',
+        role: 'aboutf'
+      },
+      {
         label: 'Close',
         accelerator: 'CmdOrCtrl+W',
         role: 'close'
       },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Preferences',
+        accelerator: 'Command+,',
+      }
     ]
   },
   {
@@ -182,8 +193,22 @@ const template = [
         label: 'Zoom',
         submenu: menuResize,
       },
+      {
+        type: 'separator',
+      },
+      {
+        label: 'Develop Tool',
+        accelerator: 'Shift+CmdOrCtrl+I',
+        click(item, win) {
+          win.webContents.toggleDevTools()
+        },
+      },
     ]
-  }
+  },
+  {
+    label: 'Help',
+    role: 'help',
+  },
 ];
 
 export default template;
