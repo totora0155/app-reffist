@@ -7,41 +7,50 @@ const menuDevice = [
   {
     label: 'iPad Pro',
     click(item, win) {
+      const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
-      ? win.setSize(1024, 1366)
-      : win.setSize(1366, 1024);
+      ? win.setSize(1024 * zoomFactor, 1366 * zoomFactor)
+      : win.setSize(1366 * zoomFactor, 1024 * zoomFactor);
     },
   },
   {
     label: 'iPad + iPad mini',
     click(item, win)  {
+      const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
-      ? win.setSize(768, 1024)
-      : win.setSize(1024, 768);
+      ? win.setSize(768 * zoomFactor, 1024 * zoomFactor)
+      : win.setSize(1024 * zoomFactor, 768 * zoomFactor);
     },
   },
   {
     label: 'iPhone 6 Plus',
     click(item, win) {
+      const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
-      ? win.setSize(414, 736)
-      : win.setSize(736, 414);
+      ? win.setSize(414 * zoomFactor, 736 * zoomFactor)
+      : win.setSize(736 * zoomFactor, 414 * zoomFactor);
     },
   },
   {
     label: 'iPhone 6',
     click(item, win) {
+      const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
-      ? win.setSize(375, 627)
-      : win.setSize(627, 375);
+      // error!!
+      // ? win.setSize(375 * zoomFactor, 627 * zoomFactor)
+      // ? win.setSize(374 * zoomFactor, 627 * zoomFactor)
+      // ? win.setSize(375 * zoomFactor, 626 * zoomFactor)
+      ? win.setSize(374 * zoomFactor, 626 * zoomFactor)
+      : win.setSize(626 * zoomFactor, 374 * zoomFactor);
     },
   },
   {
     label: 'iPhone 5se',
     click(item, win) {
+      const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
-      ? win.setSize(320, 568)
-      : win.setSize(568, 320);
+      ? win.setSize(320 * zoomFactor, 568 * zoomFactor)
+      : win.setSize(568 * zoomFactor, 320 * zoomFactor);
     }
   },
 ]
