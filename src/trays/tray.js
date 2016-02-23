@@ -1,4 +1,5 @@
-import {Tray, Menu} from 'electron';
+import {Tray, Menu, MenuItem} from 'electron';
+import storage from 'electron-json-storage';
 
 const iconPath = __dirname + '/icons/tray.png';
 const contextMenu = Menu.buildFromTemplate([
@@ -17,7 +18,24 @@ const contextMenu = Menu.buildFromTemplate([
 export default {
   create() {
     const trayIcon = new Tray(iconPath);
-    trayIcon.setContextMenu(contextMenu);
+    getBookmarks()
+      .then(() => trayIcon.setContextMenu(contextMenu));
     trayIcon.setToolTip('Reffist');
   }
 };
+
+async function getBookmarks() {
+  const bookmarksSubMenu = contextMenu.items[2].submenu;
+  const {data} = await storage.get('bookmark');
+  if (!Array.isArray(data)) return;
+
+  data.forEach(({title, url}) => {
+    const menuItem = new MenuItem({
+      label: title,
+      click() {
+        console.log(url);
+      },
+    });
+    bookmarksSubMenu.append(menuItem);
+  });
+}

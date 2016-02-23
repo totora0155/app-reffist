@@ -1,7 +1,7 @@
-import electron from 'electron';
-const {Menu, BrowserWindow} = electron;
+import {Menu, BrowserWindow} from 'electron';
 import browserwindowStore from 'stores/browserwindow-store';
 import ReffistMenu from 'menus/reffist-menu';
+import storage from 'electron-json-storage';
 
 const menuDevice = [
   {
@@ -154,6 +154,27 @@ const template = [
         accelerator: 'Command+,',
       }
     ]
+  },
+  {
+    label: 'Bookmark',
+    submenu: [
+      {
+        label: 'Add Bookmark',
+        click(item, win) {
+          const title = win.getTitle();
+          const {url} = browserwindowStore.get(win);
+          storage.get('bookmark')
+            .then(({data}) => {
+              const target = {title, url};
+              const result = data.length ? (data.push(target)) : [target];
+              storage.set('bookmark', {data: result})
+                .then((err) => {
+                  if (err) throw err;
+                });
+            });
+        },
+      },
+    ],
   },
   {
     label: 'View',

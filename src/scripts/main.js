@@ -2,6 +2,8 @@ import electron from 'electron';
 import socketIo from 'socket.io';
 import menuDarwinTemplate from '../menus/darwin';
 import browserwindowStore from 'stores/browserwindow-store';
+import tray from 'trays/tray';
+import storage from 'electron-json-storage';
 
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
 let socket = null;
@@ -12,6 +14,7 @@ app.on('ready', () => {
       Menu.setApplicationMenu(Menu.buildFromTemplate(menuDarwinTemplate));
       break;
   }
+  tray.create();
   connect();
 });
 
