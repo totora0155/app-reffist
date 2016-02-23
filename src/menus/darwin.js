@@ -1,14 +1,13 @@
 import electron from 'electron';
 const {Menu, BrowserWindow} = electron;
 import browserwindowStore from 'stores/browserwindow-store';
+import ReffistMenu from 'menus/reffist-menu';
 
 const menuDevice = [
   {
     label: 'iPad Pro',
     click(item, win) {
-      const viewMenus = Menu.getApplicationMenu().items[1].submenu;
-      const orientationMenus = viewMenus.items[0].submenu;
-      orientationMenus.items[0].checked
+      ReffistMenu.portrait
       ? win.setSize(1024, 1366)
       : win.setSize(1366, 1024);
     },
@@ -16,9 +15,7 @@ const menuDevice = [
   {
     label: 'iPad + iPad mini',
     click(item, win)  {
-      const viewMenus = Menu.getApplicationMenu().items[1].submenu;
-      const orientationMenus = viewMenus.items[0].submenu;
-      orientationMenus.items[0].checked
+      ReffistMenu.portrait
       ? win.setSize(768, 1024)
       : win.setSize(1024, 768);
     },
@@ -26,9 +23,7 @@ const menuDevice = [
   {
     label: 'iPhone 6 Plus',
     click(item, win) {
-      const viewMenus = Menu.getApplicationMenu().items[1].submenu;
-      const orientationMenus = viewMenus.items[0].submenu;
-      orientationMenus.items[0].checked
+      ReffistMenu.portrait
       ? win.setSize(414, 736)
       : win.setSize(736, 414);
     },
@@ -36,9 +31,7 @@ const menuDevice = [
   {
     label: 'iPhone 6',
     click(item, win) {
-      const viewMenus = Menu.getApplicationMenu().items[1].submenu;
-      const orientationMenus = viewMenus.items[0].submenu;
-      orientationMenus.items[0].checked
+      ReffistMenu.portrait
       ? win.setSize(375, 627)
       : win.setSize(627, 375);
     },
@@ -46,9 +39,7 @@ const menuDevice = [
   {
     label: 'iPhone 5se',
     click(item, win) {
-      const viewMenus = Menu.getApplicationMenu().items[1].submenu;
-      const orientationMenus = viewMenus.items[0].submenu;
-      orientationMenus.items[0].checked
+      ReffistMenu.portrait
       ? win.setSize(320, 568)
       : win.setSize(568, 320);
     }

@@ -1,6 +1,6 @@
 import electron from 'electron';
 import socketIo from 'socket.io';
-import menuDarwinTemplate from '../menu/darwin';
+import menuDarwinTemplate from '../menus/darwin';
 import browserwindowStore from 'stores/browserwindow-store';
 
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
