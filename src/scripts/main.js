@@ -4,6 +4,7 @@ import menuDarwinTemplate from '../menus/darwin';
 import browserwindowStore from 'stores/browserwindow-store';
 import tray from 'trays/tray';
 import storage from 'electron-json-storage';
+import WindowAction from 'actions/window-action';
 
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
 let socket = null;
@@ -23,30 +24,15 @@ function connect() {
   io.sockets.on('connection', (_socket) => {
     socket = _socket
     socket.on('open', (data) => {
-      createWindow(data.url);
+      WindowAction.create({
+        url: data.url,
+      });
     });
   });
 }
 
-function createWindow (url) {
-  let win = new BrowserWindow({
-    width: 320,
-    height: 568,
-    alwaysOnTop: true,
-    resizable: false,
-  });
-
-  win.on('closed', function() {
-    win = null;
-  });
-
-  win.loadURL(url);
-  browserwindowStore.set(win, {
-    url,
-    zoomFactor: 1,
-  });
-}
-
 app.on('window-all-closed', () => {
-  socket.disconnect();
+  if (socket != null) {
+    socket.disconnect();
+  }
 });

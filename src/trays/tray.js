@@ -1,10 +1,21 @@
-import {Tray, Menu, MenuItem} from 'electron';
+import {Tray, Menu, MenuItem, clipboard} from 'electron';
 import storage from 'electron-json-storage';
+import isURL from 'is-url';
+import WindowAction from 'actions/window-action';
+import browserwindowStore from 'stores/browserwindow-store';
 
 const iconPath = __dirname + '/icons/tray.png';
 const contextMenu = Menu.buildFromTemplate([
   {
-    label: 'Open from Clipboard'
+    label: 'Open from Clipboard',
+    click() {
+      const text = clipboard.readText();
+      if (isURL(text)) {
+        WindowAction.create({
+          url: text,
+        });
+      }
+    }
   },
   {
     type: 'separator'
