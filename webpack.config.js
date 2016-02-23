@@ -15,7 +15,7 @@ module.exports = {
   },
   resolve: {
     root: [
-      path.resolve('src/scripts')
+      path.resolve('src')
     ]
   },
   module: {
@@ -23,7 +23,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel",
+        loader: "babel-loader",
       }
     ]
   },

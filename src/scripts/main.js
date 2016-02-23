@@ -1,58 +1,17 @@
 import electron from 'electron';
 import socketIo from 'socket.io';
+import menuDarwinTemplate from '../menu/darwin';
+import browserwindowStore from 'stores/browserwindow-store';
 
-console.log(electron);
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
 let socket = null;
 
-const template = [
-  {
-    label: 'Reffist',
-    submenu: [
-      {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
-      },
-    ]
-  },
-  {
-    label: 'View',
-    role: 'view',
-    submenu: [
-      {
-        label: '100%',
-        accelerator: 'Command+1',
-        click(item, win) {
-          win.setSize(1024, 768);
-        }
-      },
-      {
-        label: '75%',
-        accelerator: 'Command+2',
-        click(item, win) {
-          win.setSize(1024 * 0.75, 768 * 0.75);
-        }
-      },
-      {
-        label: '50%',
-        accelerator: 'Command+3',
-        click(item, win) {
-          // const code = `
-          //   require('electorn').webFrame.setZoomFactor(0.5);
-          // `;
-          win.setSize(1024 * 0.5, 768 * 0.5);
-          // win.webContents.executeJavaScript(code)
-        }
-      },
-    ]
-  }
-];
-
-const menu = Menu.buildFromTemplate(template);
-
 app.on('ready', () => {
-  Menu.setApplicationMenu(menu);
+  switch (process.platform) {
+    case 'darwin':
+      Menu.setApplicationMenu(Menu.buildFromTemplate(menuDarwinTemplate));
+      break;
+  }
   connect();
 });
 
@@ -68,13 +27,10 @@ function connect() {
 
 function createWindow (url) {
   let win = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    // width: 1024 / 2,
-    // height: 768 / 2,
+    width: 320,
+    height: 568,
     alwaysOnTop: true,
     resizable: false,
-    // zoomFactor: 0.5,
   });
 
   win.on('closed', function() {
@@ -82,6 +38,10 @@ function createWindow (url) {
   });
 
   win.loadURL(url);
+  browserwindowStore.set(win, {
+    url,
+    zoomFactor: 1,
+  });
 }
 
 app.on('window-all-closed', () => {
