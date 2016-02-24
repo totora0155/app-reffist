@@ -28,13 +28,13 @@ const trayMenu = Menu.buildFromTemplate([
 
 export default {
   create() {
-    const trayIcon = new Tray(iconPath);
+    const tray = new Tray(iconPath);
     getBookmarks()
       .then(() => {
-        trayIcon.setContextMenu(trayMenu);
+        tray.setContextMenu(trayMenu);
       });
-    trayIcon.setToolTip('Reffist');
-    return trayMenu;
+    tray.setToolTip('Reffist');
+    return tray;
   }
 };
 

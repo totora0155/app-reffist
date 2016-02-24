@@ -3,11 +3,11 @@ import socketIo from 'socket.io';
 import menuDarwinTemplate from '../menus/darwin';
 import browserwindowStore from 'stores/browserwindow-store';
 import tray from 'trays/tray';
+import memory from 'stores/memory';
 import storage from 'electron-json-storage';
 import WindowAction from 'actions/window-action';
 
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
-let trayMenu = null;
 let socket = null;
 
 app.on('ready', () => {
@@ -16,7 +16,7 @@ app.on('ready', () => {
       Menu.setApplicationMenu(Menu.buildFromTemplate(menuDarwinTemplate));
       break;
   }
-  trayMenu = tray.create();
+  memory.tray = tray.create();
   connect();
 });
 
