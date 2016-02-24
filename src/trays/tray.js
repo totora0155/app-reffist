@@ -30,14 +30,16 @@ export default {
   create() {
     const trayIcon = new Tray(iconPath);
     getBookmarks()
-      .then(() => trayIcon.setContextMenu(trayMenu));
+      .then(() => {
+        trayIcon.setContextMenu(trayMenu);
+      });
     trayIcon.setToolTip('Reffist');
     return trayMenu;
   }
 };
 
 async function getBookmarks() {
-  const bookmarksSubMenu = contextMenu.items[2].submenu;
+  const bookmarksSubMenu = trayMenu.items[2].submenu;
   const {data} = await storage.get('bookmark');
   if (!Array.isArray(data)) return;
 
@@ -45,7 +47,7 @@ async function getBookmarks() {
     const menuItem = new MenuItem({
       label: title,
       click() {
-        console.log(url);
+        WindowAction.create({url});
       },
     });
     bookmarksSubMenu.append(menuItem);

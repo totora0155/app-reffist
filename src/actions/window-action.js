@@ -2,14 +2,17 @@ import EventEmitter from 'events';
 import {BrowserWindow} from 'electron';
 import browserwindowStore from 'stores/browserwindow-store';
 
+const defaults = {
+  width: 320,
+  height: 568,
+  alwaysOnTop: true,
+  resizable: false,
+}
+
 class WindowAction extends EventEmitter {
-  static create({url}) {
-    let win = new BrowserWindow({
-      width: 320,
-      height: 568,
-      alwaysOnTop: true,
-      resizable: false,
-    });
+  static create({url}, assigner = {}) {
+    const opts = Object.assign(defaults, assigner);
+    let win = new BrowserWindow(opts);
 
     win.on('closed', function() {
       win = null;

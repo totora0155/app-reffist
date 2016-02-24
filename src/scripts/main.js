@@ -24,10 +24,8 @@ function connect() {
   const io = socketIo.listen(53825);
   io.sockets.on('connection', (_socket) => {
     socket = _socket
-    socket.on('open', (data) => {
-      WindowAction.create({
-        url: data.url,
-      });
+    socket.on('open', (sendData) => {
+      WindowAction.create(sendData);
     });
   });
 }

@@ -166,7 +166,9 @@ const template = [
           storage.get('bookmark')
             .then(({data}) => {
               const target = {title, url};
-              const result = data.length ? (data.push(target)) : [target];
+              const result = Array.isArray(data)
+                             ? (data.push(target))
+                             : [target];
               storage.set('bookmark', {data: result})
                 .then((err) => {
                   if (err) throw err;
