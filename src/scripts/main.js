@@ -7,8 +7,18 @@ import memory from 'stores/memory';
 import storage from 'electron-json-storage';
 import WindowAction from 'actions/window-action';
 
+// import ReffistAction from 'actions/reffist-action';
+// import ReffistStore from 'stores/reffist-store';
+// ReffistAction.create({foo: 1}, {bar: 2});
+
+
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
 let socket = null;
+
+// app.on('ready', () => {
+//   ReffistStore.init() // appMenu, trayMenu etc
+//   ReffistAction.connectSocket();
+// })
 
 app.on('ready', () => {
   switch (process.platform) {

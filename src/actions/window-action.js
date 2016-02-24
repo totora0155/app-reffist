@@ -1,6 +1,8 @@
 import EventEmitter from 'events';
 import {BrowserWindow} from 'electron';
+import socketIo
 import browserwindowStore from 'stores/browserwindow-store';
+import storage from 'electron-json-storage';
 
 const defaults = {
   width: 320,
@@ -10,6 +12,7 @@ const defaults = {
 }
 
 class WindowAction extends EventEmitter {
+
   static create({url}, assigner = {}) {
     const opts = Object.assign(defaults, assigner);
     let win = new BrowserWindow(opts);
