@@ -5,7 +5,7 @@ import WindowAction from 'actions/window-action';
 import browserwindowStore from 'stores/browserwindow-store';
 
 const iconPath = __dirname + '/icons/tray.png';
-const contextMenu = Menu.buildFromTemplate([
+const trayMenu = Menu.buildFromTemplate([
   {
     label: 'Open from Clipboard',
     click() {
@@ -30,8 +30,9 @@ export default {
   create() {
     const trayIcon = new Tray(iconPath);
     getBookmarks()
-      .then(() => trayIcon.setContextMenu(contextMenu));
+      .then(() => trayIcon.setContextMenu(trayMenu));
     trayIcon.setToolTip('Reffist');
+    return trayMenu;
   }
 };
 
