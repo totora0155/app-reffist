@@ -7,6 +7,12 @@ import memory from 'stores/memory';
 import storage from 'electron-json-storage';
 import WindowAction from 'actions/window-action';
 
+import appMenu from 'menus/app-menu';
+import trayMenu from 'menus/tray-menu';
+
+const PORT = 53825;
+// import contextMenu from 'menus/context-menu';
+
 // import ReffistAction from 'actions/reffist-action';
 // import ReffistStore from 'stores/reffist-store';
 // ReffistAction.create({foo: 1}, {bar: 2});
@@ -15,20 +21,26 @@ import WindowAction from 'actions/window-action';
 const {app, remote, BrowserWindow, Menu, webFrame} = electron;
 let socket = null;
 
-// app.on('ready', () => {
-//   ReffistStore.init() // appMenu, trayMenu etc
-//   ReffistAction.connectSocket();
-// })
-
 app.on('ready', () => {
-  switch (process.platform) {
-    case 'darwin':
-      Menu.setApplicationMenu(Menu.buildFromTemplate(menuDarwinTemplate));
-      break;
-  }
-  memory.tray = tray.create();
-  connect();
+  ReffistAction.setAppMenu(appMenu);
+  ReffistAction.setTrayMenu(trayMenu);
+  ReffistAction.addSocketListener({
+    post: PORT,
+  });
+})
+
+ReffistStore.addSocketListener((sendData) => {
+  ReffistAction.createBW(sendData);
 });
+
+  // switch (process.platform) {
+  //   case 'darwin':
+  //     Menu.setApplicationMenu(Menu.buildFromTemplate(menuDarwinTemplate));
+  //     break;
+  // }
+  // memory.tray = tray.create();
+  // connect();
+// });
 
 function connect() {
   const io = socketIo.listen(53825);
@@ -41,7 +53,5 @@ function connect() {
 }
 
 app.on('window-all-closed', () => {
-  if (socket != null) {
-    socket.disconnect();
-  }
+  ReffistAction.removeSocketListener();
 });
