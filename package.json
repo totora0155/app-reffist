@@ -4,8 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build:main": "webpack src/scripts/main.js main.js --progress",
-    "watch:main": "chokidar src/**/*.js -c 'npm run build:main'",
+    "watch": "gulp scripts:watch",
     "start:inspector": "node-inspector",
     "start:debug": "electron --debug=5858 main.js",
     "start": "electron main.js"
@@ -38,6 +37,7 @@
     "gulp-babel": "^6.1.2",
     "node-inspector": "^0.12.6",
     "npm-run-all": "^1.5.1",
+    "progress-bar-webpack-plugin": "^1.4.1",
     "webpack": "^1.12.13",
     "webpack-hot-middleware": "^2.7.1",
     "webpack-stream": "^3.1.0",
