@@ -6,6 +6,7 @@ import storage from 'electron-json-storage';
 const menuDevice = [
   {
     label: 'iPad Pro',
+    type: 'radio',
     click(item, win) {
       const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
@@ -15,6 +16,7 @@ const menuDevice = [
   },
   {
     label: 'iPad + iPad mini',
+    type: 'radio',
     click(item, win)  {
       const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
@@ -24,6 +26,7 @@ const menuDevice = [
   },
   {
     label: 'iPhone 6 Plus',
+    type: 'radio',
     click(item, win) {
       const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
@@ -33,6 +36,7 @@ const menuDevice = [
   },
   {
     label: 'iPhone 6',
+    type: 'radio',
     click(item, win) {
       const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
@@ -46,6 +50,7 @@ const menuDevice = [
   },
   {
     label: 'iPhone 5se',
+    checked: true,
     click(item, win) {
       const {zoomFactor} = browserwindowStore.get(win);
       ReffistMenu.portrait
@@ -58,7 +63,9 @@ const menuDevice = [
 const menuResize = [
   {
     label: '100%',
-    accelerator: 'Command+1',
+    type: 'radio',
+    checked: true,
+    accelerator: 'Command+0',
     click(item, currentWin) {
       const ZOOM_FACTOR = 1;
       const [width, height] = currentWin.getSize();
@@ -83,7 +90,8 @@ const menuResize = [
   },
   {
     label: '75%',
-    accelerator: 'Command+2',
+    type: 'radio',
+    accelerator: 'Command+9',
     click(item, currentWin) {
       const ZOOM_FACTOR = 0.75;
       const [width, height] = currentWin.getSize();
@@ -108,7 +116,8 @@ const menuResize = [
   },
   {
     label: '50%',
-    accelerator: 'Command+3',
+    type: 'radio',
+    accelerator: 'Command+8',
     click(item, currentWin) {
       const ZOOM_FACTOR = 0.5;
       const [width, height] = currentWin.getSize();
@@ -188,6 +197,8 @@ const template = [
           {
             label: 'portrait',
             type: 'radio',
+            checked: true,
+            accelerator: 'Command+p',
             click(item, win) {
               const [width, height] = win.getSize();
               width > height
@@ -198,7 +209,7 @@ const template = [
           {
             label: 'landscape',
             type: 'radio',
-            checked: true,
+            accelerator: 'Command+l',
             click(item, win) {
               const [width, height] = win.getSize();
               width > height

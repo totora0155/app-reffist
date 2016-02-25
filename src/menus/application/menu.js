@@ -4,6 +4,7 @@ import _ from 'lodash';
 class ApplicationMenu {
   constructor(template) {
     this.menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(this.menu);
   }
 
   get view() {

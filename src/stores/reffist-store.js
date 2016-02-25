@@ -103,7 +103,6 @@ dispatcher.register((payload) => {
       {
         const {menuTemplate} = payload
         _appMenu = new ApplicationMenu(menuTemplate);
-        // _appMenu = ApplicationMenu.buildFromTemplate(menuTemplate);
       }
       break;
     case actionType.SET_TRAY_MENU:
