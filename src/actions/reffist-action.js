@@ -5,30 +5,41 @@ import actionType from 'constants/action-type'
 let _socket = null
 
 class ReffistAction {
-  static setAppMenu(menu) {
-    const actionType = actionType.SET_APP_MENU;
-    dispatcher.dispatch({actionType, menu});
+  static setAppMenu(menuTemplate) {
+    dispatcher.dispatch({
+      actionType: actionType.SET_APP_MENU,
+      menuTemplate,
+    });
   }
 
-  static setTrayMenu(menu) {
-    const actionType = actionType.SET_TRAY_MENU;
-    dispatcher.dispatch({actionType, menu});
+  static setTrayMenu(menuTemplate) {
+    dispatcher.dispatch({
+      actionType: actionType.SET_TRAY_MENU,
+      menuTemplate,
+    });
   }
 
   static addSocketListener({port}) {
-    const actionType = actionType.ADD_SOCKET_LISTENER;
-    dispatcher.dispatch({actionType, port});
+    dispatcher.dispatch({
+      actionType: actionType.ADD_SOCKET_LISTENER,
+      port,
+    });
   }
 
-  static createBW(opts, url) {
-    console.log(actionTypeConstant.CREATE_BW);
-    console.log(opts, url);
-    console.log(dispatcher.dispatch);
+  static createBW(data, assigner = {}) {
     dispatcher.dispatch({
-      actionType: actionTypeConstant.CREATE_BW,
-      opts,
-      url,
+      actionType: actionType.CREATE_BW,
+      data,
+      assigner,
     });
+  }
+
+  static changeDevice(item, targetWindow) {
+    dispatcher.dispatch({
+      actionType: sctionType.CHANGE_DEVICE,
+      item,
+      targetWindow,
+    })
   }
 }
 

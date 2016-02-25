@@ -1,6 +1,5 @@
 import EventEmitter from 'events';
 import {BrowserWindow} from 'electron';
-import socketIo
 import browserwindowStore from 'stores/browserwindow-store';
 import storage from 'electron-json-storage';
 

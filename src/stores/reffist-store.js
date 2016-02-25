@@ -1,10 +1,17 @@
-import {Menu, Tray} from 'electron';
+import {Menu, Tray, BrowserWindow} from 'electron';
+import EventEmitter from 'events';
+import ApplicationMenu from 'menus/application/menu';
+import TrayMenu from 'menus/tray/menu';
 import dispatcher from 'dispatcher';
 import io from 'socket.io';
 import storage from 'electron-json-storage';
-import actionType from 'constants/action-type-constant';
+import actionType from 'constants/action-type';
 
-const bwMap = new WeakMap();
+// Object.assign(Menu.prototype, ApplicationMenu);
+
+// console.log(Menu);
+
+const bwData = new WeakMap();
 
 const bwDefaults = {
   width: 320,
@@ -13,17 +20,20 @@ const bwDefaults = {
   resizable: false,
 }
 
-let _socket = null;
+let _handleOpen = null;
+let _appMenu = null;
+let _trayMenu = null;
 
 class ReffistStore {
   static addSocketListener(cb) {
+    console.log(_socket);
     if (_socket) {
       _socket.on('open', cb);
     }
   }
 
-  static removeSocketListener(cb) {
-    console.log(_socket);
+  static get appMenu() {
+    return _appMenu;
   }
 
   static createBW({url}, assigner = {}) {
@@ -39,6 +49,14 @@ class ReffistStore {
       url,
       zoomFactor: 1,
     });
+  }
+
+  static addSocketListener(handleOpen) {
+    _handleOpen = handleOpen;
+  }
+
+  static removeSocketListener() {
+    _handleOpen = null;
   }
 
   // static getBookmark() {
@@ -68,32 +86,47 @@ class ReffistStore {
 
 export default ReffistStore;
 
+let a = null;
+
 dispatcher.register((payload) => {
   switch (payload.actionType) {
-    case actionType.CONNECT_SOCKET:
+    case actionType.INIT_SOCKET:
       const {port} = payload;
-      connectSocket(port);
+      const {sockets} = io.listen(port);
+      sockets.on('connection', (socket) => {
+        if (_handleOpen) {
+          socket.on('open', _handleOpen);
+        }
+      });
       break;
     case actionType.SET_APP_MENU:
-      const {appMenu} = payload
-      const menu = buildMenu(appMenu);
+      {
+        const {menuTemplate} = payload
+        _appMenu = new ApplicationMenu(menuTemplate);
+        // _appMenu = ApplicationMenu.buildFromTemplate(menuTemplate);
+      }
       break;
     case actionType.SET_TRAY_MENU:
-      const {trayMenu} = payload
-      const menu = buildMenu(trayMenu);
+      {
+        const {menuTemplate} = payload
+        const _trayMenu = buildMenu(menuTemplate);
+      }
       break;
     case actionType.CREATE_BW:
-      console.log(123);
+      {
+        const {data, assigner} = payload;
+        createBW(data, assigner);
+      }
       break;
   }
 });
 
-function connectSocket(port) {
-  const {sockets} = io.listen(port);
-  scokets.on('connection', (socket) => {
-    _socket = socket;
-  });
-}
+// function connectSocket(port) {
+//   const {sockets} = io.listen(port);
+//   scokets.on('connection', (socket) => {
+//     // _socket = socket;
+//   });
+// }
 
 function buildMenu(template) {
   Menu.buildFromTemplate(template);
@@ -124,4 +157,19 @@ async function getBookmarks() {
     });
     bookmarksSubMenu.append(menuItem);
   });
+}
+
+function createBW({url}, assigner = {}) {
+  const opts = Object.assign(bwDefaults, assigner);
+  let win = new BrowserWindow(opts);
+
+  win.on('closed', function() {
+    win = null;
+  });
+
+  win.loadURL(url);
+  bwData.set(win, {
+    url,
+    zoomFactor: 1,
+  })
 }

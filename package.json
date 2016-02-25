@@ -6,7 +6,8 @@
   "scripts": {
     "build:main": "webpack src/scripts/main.js main.js --progress",
     "watch:main": "chokidar src/**/*.js -c 'npm run build:main'",
-    "start:electron": "electron main.js",
+    "start:inspector": "node-inspector",
+    "start:debug": "electron --debug=5858 main.js",
     "start": "electron main.js"
   },
   "repository": {},
@@ -33,6 +34,7 @@
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.0",
     "extract-text-webpack-plugin": "^1.0.1",
+    "node-inspector": "^0.12.6",
     "npm-run-all": "^1.5.1",
     "webpack": "^1.12.13",
     "webpack-hot-middleware": "^2.7.1",
@@ -43,6 +45,7 @@
     "flux": "^2.1.1",
     "is-url": "^1.2.1",
     "keymirror": "^0.1.1",
+    "lodash": "^4.5.1",
     "socket.io": "^1.4.5"
   }
 }

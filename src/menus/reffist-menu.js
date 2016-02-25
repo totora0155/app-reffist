@@ -9,10 +9,6 @@ class ReffistMenu extends Menu {
           .items[0];
     return portrait.checked;
   }
-
-  constructor() {
-    super();
-  }
 }
 
 export default ReffistMenu;
