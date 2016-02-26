@@ -21,7 +21,7 @@ class TrayMenu {
         };
 
         const item = new MenuItem(opts);
-        this.menu.append(item);
+        this.menu.items[2].submenu.append(item);
       });
       tray.setContextMenu(this.menu);
     })();

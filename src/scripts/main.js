@@ -5,7 +5,8 @@ import appMenu4Darwin from 'menus/application/darwin';
 import trayMenu4Darwin from 'menus/tray/darwin';
 import memory from 'memory';
 
-// import storage from 'electron-json-storage';
+import storage from 'electron-json-storage';
+// storage.remove('bookmark');
 // storage.set('bookmark', [
 //   {
 //     "title": "Google",

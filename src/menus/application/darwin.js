@@ -1,4 +1,5 @@
 import {Menu, BrowserWindow} from 'electron';
+import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import storage from 'electron-json-storage';
 
@@ -6,55 +7,55 @@ const menuDevice = [
   {
     label: 'iPad Pro',
     type: 'radio',
-    click(item, win) {
-      const {zoomFactor} = browserwindowStore.get(win);
-      ReffistMenu.portrait
-      ? win.setSize(1024 * zoomFactor, 1366 * zoomFactor)
-      : win.setSize(1366 * zoomFactor, 1024 * zoomFactor);
+    click(item, bw) {
+      const {zoomFactor} = ReffistStore.getBWData(bw);
+      ReffistStore.orientation === 'portrait'
+      ? bw.setSize(1024 * zoomFactor, 1366 * zoomFactor)
+      : bw.setSize(1366 * zoomFactor, 1024 * zoomFactor);
     },
   },
   {
     label: 'iPad + iPad mini',
     type: 'radio',
-    click(item, win)  {
-      const {zoomFactor} = browserwindowStore.get(win);
-      ReffistMenu.portrait
-      ? win.setSize(768 * zoomFactor, 1024 * zoomFactor)
-      : win.setSize(1024 * zoomFactor, 768 * zoomFactor);
+    click(item, bw)  {
+      const {zoomFactor} = ReffistStore.getBWData(bw);
+      ReffistMenu.orientation === 'portrait'
+      ? bw.setSize(768 * zoomFactor, 1024 * zoomFactor)
+      : bw.setSize(1024 * zoomFactor, 768 * zoomFactor);
     },
   },
   {
     label: 'iPhone 6 Plus',
     type: 'radio',
-    click(item, win) {
-      const {zoomFactor} = browserwindowStore.get(win);
-      ReffistMenu.portrait
-      ? win.setSize(414 * zoomFactor, 736 * zoomFactor)
-      : win.setSize(736 * zoomFactor, 414 * zoomFactor);
+    click(item, bw) {
+      const {zoomFactor} = ReffistStore.getBWData(bw);
+      ReffistMenu.orientation === 'portrait'
+      ? bw.setSize(414 * zoomFactor, 736 * zoomFactor)
+      : bw.setSize(736 * zoomFactor, 414 * zoomFactor);
     },
   },
   {
     label: 'iPhone 6',
     type: 'radio',
-    click(item, win) {
-      const {zoomFactor} = browserwindowStore.get(win);
-      ReffistMenu.portrait
+    click(item, bw) {
+      const {zoomFactor} = ReffistStore.getBWData(bw);
+      ReffistMenu.orientation === 'portrait'
       // error!!
-      // ? win.setSize(375 * zoomFactor, 627 * zoomFactor)
-      // ? win.setSize(374 * zoomFactor, 627 * zoomFactor)
-      // ? win.setSize(375 * zoomFactor, 626 * zoomFactor)
-      ? win.setSize(374 * zoomFactor, 626 * zoomFactor)
-      : win.setSize(626 * zoomFactor, 374 * zoomFactor);
+      // ? bw.setSize(375 * zoomFactor, 627 * zoomFactor)
+      // ? bw.setSize(374 * zoomFactor, 627 * zoomFactor)
+      // ? bw.setSize(375 * zoomFactor, 626 * zoomFactor)
+      ? bw.setSize(374 * zoomFactor, 626 * zoomFactor)
+      : bw.setSize(626 * zoomFactor, 374 * zoomFactor);
     },
   },
   {
     label: 'iPhone 5se',
     checked: true,
-    click(item, win) {
-      const {zoomFactor} = browserwindowStore.get(win);
-      ReffistMenu.portrait
-      ? win.setSize(320 * zoomFactor, 568 * zoomFactor)
-      : win.setSize(568 * zoomFactor, 320 * zoomFactor);
+    click(item, bw) {
+      const {zoomFactor} = ReffistStore.getBWData(bw);
+      ReffistMenu.orientation === 'portrait'
+      ? bw.setSize(320 * zoomFactor, 568 * zoomFactor)
+      : bw.setSize(568 * zoomFactor, 320 * zoomFactor);
     }
   },
 ]
@@ -65,79 +66,19 @@ const menuResize = [
     type: 'radio',
     checked: true,
     accelerator: 'Command+0',
-    click(item, currentWin) {
-      const ZOOM_FACTOR = 1;
-      const [width, height] = currentWin.getSize();
-      const [x, y] = currentWin.getPosition();
-      const {url, zoomFactor} = browserwindowStore.get(currentWin);
-      const win = new BrowserWindow({
-        x,
-        y,
-        zoomFactor: ZOOM_FACTOR,
-        width: width / zoomFactor * ZOOM_FACTOR,
-        height: height / zoomFactor * ZOOM_FACTOR,
-        alwaysOnTop: true,
-        resizable: false,
-      });
-      win.loadURL(url);
-      browserwindowStore.set(win, {
-        url,
-        zoomFactor: ZOOM_FACTOR,
-      });
-      currentWin.destroy();
-    }
+    click: handleZoom.bind(null, 1),
   },
   {
     label: '75%',
     type: 'radio',
     accelerator: 'Command+9',
-    click(item, currentWin) {
-      const ZOOM_FACTOR = 0.75;
-      const [width, height] = currentWin.getSize();
-      const [x, y] = currentWin.getPosition();
-      const {url, zoomFactor} = browserwindowStore.get(currentWin);
-      const win = new BrowserWindow({
-        x,
-        y,
-        zoomFactor: ZOOM_FACTOR,
-        width: width / zoomFactor * ZOOM_FACTOR,
-        height: height / zoomFactor * ZOOM_FACTOR,
-        alwaysOnTop: true,
-        resizable: false,
-      });
-      win.loadURL(url);
-      browserwindowStore.set(win, {
-        url,
-        zoomFactor: ZOOM_FACTOR,
-      });
-      currentWin.destroy();
-    }
+    click: handleZoom.bind(null, 0.75),
   },
   {
     label: '50%',
     type: 'radio',
     accelerator: 'Command+8',
-    click(item, currentWin) {
-      const ZOOM_FACTOR = 0.5;
-      const [width, height] = currentWin.getSize();
-      const [x, y] = currentWin.getPosition();
-      const {url, zoomFactor} = browserwindowStore.get(currentWin);
-      const win = new BrowserWindow({
-        x,
-        y,
-        zoomFactor: ZOOM_FACTOR,
-        width: width / zoomFactor * ZOOM_FACTOR,
-        height: height / zoomFactor * ZOOM_FACTOR,
-        alwaysOnTop: true,
-        resizable: false,
-      });
-      win.loadURL(url);
-      browserwindowStore.set(win, {
-        url,
-        zoomFactor: ZOOM_FACTOR,
-      });
-      currentWin.destroy();
-    }
+    click: handleZoom.bind(null, 0.5),
   },
 ]
 
@@ -248,3 +189,17 @@ const template = [
 ];
 
 export default template;
+
+function handleZoom(zoomFactor, item, bw) {
+  const [width, height] = bw.getSize();
+  const [x, y] = bw.getPosition();
+  const {url, zoomFactor: currentZoomFactor} = ReffistStore.getBWData(bw);
+
+  ReffistAction.createBW({url}, {
+    x, y,
+    zoomFactor,
+    width: width / currentZoomFactor * zoomFactor,
+    height: height / currentZoomFactor * zoomFactor,
+  });
+  bw.destroy();
+}

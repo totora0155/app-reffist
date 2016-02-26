@@ -11,7 +11,7 @@ class ApplicationMenu {
     return this.menu.items[2];
   }
 
-  get portrait() {
+  get orientation() {
     const menu = this.view.submenu.items[0].submenu;
     const {label} = _.find(menu.items, {checked: true});
     return label;

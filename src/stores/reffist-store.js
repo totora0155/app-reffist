@@ -14,11 +14,12 @@ import actionType from 'constants/action-type';
 const bwDefaults = {
   width: 320,
   height: 568,
+  zoomFactor: 1,
   alwaysOnTop: true,
   resizable: false,
 }
 
-const bwOptions = new WeakMap();
+const bwData = new WeakMap();
 
 let _handleOpen = null;
 let _appMenu = null;
@@ -37,8 +38,16 @@ class ReffistStore {
     return bwDefaults;
   }
 
-  static get currentBWOptions() {
-    const opts = bwOptions.get(bw);
+  static get orientation() {
+    return _appMenu.orientation;
+  }
+
+  static setBWData(bw, data) {
+    bwData.set(bw, data);
+  }
+
+  static getBWData(bw) {
+    const opts = bwData.get(bw);
     return opts;
   }
 
@@ -49,11 +58,8 @@ class ReffistStore {
 
   static getBookmark() {
     return (async () => {
-      storage.get('bookmark', (data) => {
-        console.log(data);
-      });
       const data = await storage.get('bookmark');
-      return data;
+      return Array.isArray(data) ? data : [];
     })();
   }
 }
@@ -114,8 +120,8 @@ function createBW({url}, assigner = {}) {
   const opts = Object.assign(bwDefaults, assigner);
   let bw = new BrowserWindow(opts);
   {
-    const zoomFactor = 1;
-    bwOptions.set(bw, {url, zoomFactor});
+    const {zoomFactor} = opts;
+    bwData.set(bw, {url, zoomFactor});
   }
 
   bw.on('closed', () => {
