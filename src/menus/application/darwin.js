@@ -1,6 +1,7 @@
 import {Menu, BrowserWindow} from 'electron';
 import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
+import device from 'constants/device';
 import storage from 'electron-json-storage';
 
 const menuDevice = [
@@ -9,9 +10,18 @@ const menuDevice = [
     type: 'radio',
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistStore.orientation === 'portrait'
-      ? bw.setSize(1024 * zoomFactor, 1366 * zoomFactor)
-      : bw.setSize(1366 * zoomFactor, 1024 * zoomFactor);
+      const [WIDTH, HEIGHT] = device.IPAD_PRO.size
+      let width = null;
+      let height = null;
+
+      if (ReffistStore.orientation === 'portrait') {
+        width = Math.round(WIDTH * zoomFactor);
+        height = Math.round(HEIGHT * zoomFactor);
+      } else {
+        width = Math.round(HEIGHT * zoomFactor);
+        height = Math.round(WIDTH * zoomFactor);
+      }
+      bw.setSize(width, height);
     },
   },
   {
@@ -19,9 +29,18 @@ const menuDevice = [
     type: 'radio',
     click(item, bw)  {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistStore.orientation === 'portrait'
-      ? bw.setSize(768 * zoomFactor, 1024 * zoomFactor)
-      : bw.setSize(1024 * zoomFactor, 768 * zoomFactor);
+      const [WIDTH, HEIGHT] = device.IPAD.size
+      let width = null;
+      let height = null;
+
+      if (ReffistStore.orientation === 'portrait') {
+        width = Math.round(WIDTH * zoomFactor);
+        height = Math.round(HEIGHT * zoomFactor);
+      } else {
+        width = Math.round(HEIGHT * zoomFactor);
+        height = Math.round(WIDTH * zoomFactor);
+      }
+      bw.setSize(width, height);
     },
   },
   {
@@ -29,9 +48,18 @@ const menuDevice = [
     type: 'radio',
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistStore.orientation === 'portrait'
-      ? bw.setSize(414 * zoomFactor, 736 * zoomFactor)
-      : bw.setSize(736 * zoomFactor, 414 * zoomFactor);
+      const [WIDTH, HEIGHT] = device.IPHONE_6_PLUS.size;
+      let width = null;
+      let height = null;
+
+      if (ReffistStore.orientation === 'portrait') {
+        width = Math.round(WIDTH * zoomFactor);
+        height = Math.round(HEIGHT * zoomFactor);
+      } else {
+        width = Math.round(HEIGHT * zoomFactor);
+        height = Math.round(WIDTH * zoomFactor);
+      }
+      bw.setSize(width, height);
     },
   },
   {
@@ -39,28 +67,43 @@ const menuDevice = [
     type: 'radio',
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistStore.orientation === 'portrait'
-      // error!!
-      // ? bw.setSize(375 * zoomFactor, 627 * zoomFactor)
-      // ? bw.setSize(374 * zoomFactor, 627 * zoomFactor)
-      // ? bw.setSize(375 * zoomFactor, 626 * zoomFactor)
-      ? bw.setSize(374 * zoomFactor, 626 * zoomFactor)
-      : bw.setSize(626 * zoomFactor, 374 * zoomFactor);
+      const [WIDTH, HEIGHT] = device.IPHONE_6.size;
+      let width = null;
+      let height = null;
+
+      if (ReffistStore.orientation === 'portrait') {
+        width = Math.round(WIDTH * zoomFactor);
+        height = Math.round(HEIGHT * zoomFactor);
+      } else {
+        width = Math.round(HEIGHT * zoomFactor);
+        height = Math.round(WIDTH * zoomFactor);
+      }
+      bw.setSize(width, height);
     },
   },
   {
     label: 'iPhone 5se',
+    type: 'radio',
     checked: true,
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistStore.orientation === 'portrait'
-      ? bw.setSize(320 * zoomFactor, 568 * zoomFactor)
-      : bw.setSize(568 * zoomFactor, 320 * zoomFactor);
-    }
+      const [WIDTH, HEIGHT] = device.IPHONE_5SE.size
+      let width = null;
+      let height = null;
+
+      if (ReffistStore.orientation === 'portrait') {
+        width = Math.round(WIDTH * zoomFactor);
+        height = Math.round(HEIGHT * zoomFactor);
+      } else {
+        width = Math.round(HEIGHT * zoomFactor);
+        height = Math.round(WIDTH * zoomFactor);
+      }
+      bw.setSize(width, height);
+    },
   },
 ]
 
-const menuResize = [
+const menuScale = [
   {
     label: '100%',
     type: 'radio',
@@ -109,23 +152,19 @@ const template = [
     submenu: [
       {
         label: 'Add Bookmark',
-        click(item, win) {
-          const title = win.getTitle();
-          const {url} = ReffistStore.bwOptions;
+        click(item, bw) {
+          const title = bw.getTitle();
+          const {url} = ReffistStore.getBWData(bw);
 
           (async () => {
-          })
-          storage.get('bookmark')
-            .then(({data}) => {
-              const target = {title, url};
-              const result = Array.isArray(data)
-                             ? (data.push(target))
-                             : [target];
-            //   storage.set('bookmark', {data: result})
-            //     .then((err) => {
-            //       if (err) throw err;
-            //     });
-            });
+            const {data} = await storage.get('bookmark');
+            const bookmarkData = {title, url};
+            const result = Array.isArray(data)
+                           ? (data.push(bookmarkData))
+                           : [bookmarkData];
+            await storage.set('bookmark', {data: result});
+            ReffistAction.addBookmark(bookmarkData);
+          })();
         },
       },
     ],
@@ -167,8 +206,8 @@ const template = [
         submenu: menuDevice,
       },
       {
-        label: 'Zoom',
-        submenu: menuResize,
+        label: 'Scale',
+        submenu: menuScale,
       },
       {
         type: 'separator',
@@ -198,8 +237,8 @@ function handleZoom(zoomFactor, item, bw) {
   ReffistAction.createBW({url}, {
     x, y,
     zoomFactor,
-    width: width / currentZoomFactor * zoomFactor,
-    height: height / currentZoomFactor * zoomFactor,
+    width: Math.round(width / currentZoomFactor * zoomFactor),
+    height: Math.round(height / currentZoomFactor * zoomFactor),
   });
   bw.destroy();
 }

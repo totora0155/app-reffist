@@ -1,15 +1,10 @@
 import {remote ,Menu, Tray, BrowserWindow} from 'electron';
-import EventEmitter from 'events';
+import io from 'socket.io';
+import dispatcher from 'dispatcher';
 import ApplicationMenu from 'menus/application/menu';
 import TrayMenu from 'menus/tray/menu';
-import dispatcher from 'dispatcher';
-import io from 'socket.io';
-import storage from 'electron-json-storage';
 import actionType from 'constants/action-type';
-
-// Object.assign(Menu.prototype, ApplicationMenu);
-
-// console.log(Menu);
+import storage from 'electron-json-storage';
 
 const bwDefaults = {
   width: 320,
@@ -38,10 +33,6 @@ class ReffistStore {
     return bwDefaults;
   }
 
-  static get orientation() {
-    return _appMenu.orientation;
-  }
-
   static setBWData(bw, data) {
     bwData.set(bw, data);
   }
@@ -51,14 +42,13 @@ class ReffistStore {
     return opts;
   }
 
-  // static get bwOptions(bw) {
-  //   const opts = bwOptions(bw);
-  //   return opts;
-  // }
+  static get orientation() {
+    return _appMenu.orientation;
+  }
 
   static getBookmark() {
     return (async () => {
-      const data = await storage.get('bookmark');
+      const {data} = await storage.get('bookmark');
       return Array.isArray(data) ? data : [];
     })();
   }
@@ -86,7 +76,7 @@ dispatcher.register((payload) => {
     case actionType.SET_TRAY_MENU:
       {
         const {menuTemplate} = payload
-        const _trayMenu = new TrayMenu(menuTemplate);
+        _trayMenu = new TrayMenu(menuTemplate);
       }
       break;
     case actionType.CREATE_BW:
@@ -97,20 +87,20 @@ dispatcher.register((payload) => {
       break;
     case actionType.ADD_BOOKMARK:
       {
-        const {bookmark} = payload;
-        TrayMenu.addBookmark(bookmark);
+        const {data} = payload;
+        _trayMenu.addBookmark(data);
       }
       break;
     case actionType.DELETE_BOOKMARK:
       {
         const {bookmarkId} = payload;
-        TrayMenu.deleteBookmark(bookmarkId);
+        _trayMenu.deleteBookmark(bookmarkId);
       }
       break;
     case actionType.SWAP_BOOKMARK:
       {
         const {origId, targetId} = payload;
-        TrayMenu.swapBookmark(orig, target);
+        _trayMenu.swapBookmark(orig, target);
       }
       break;
   }

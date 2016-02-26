@@ -8,8 +8,9 @@ const iconPath = __dirname + '/icons/tray.png';
 class TrayMenu {
   constructor(template) {
     this.menu = Menu.buildFromTemplate(template);
-    const tray = memory.tray = new Tray(iconPath);
-    tray.setToolTip('Reffist');
+    this.bookmark = this.menu.items[2];
+    this.tray = memory.tray = new Tray(iconPath);
+    this.tray.setToolTip('Reffist');
     (async () => {
       const bookmarks = await ReffistStore.getBookmark();
       bookmarks.forEach(({title, url}) => {
@@ -23,30 +24,24 @@ class TrayMenu {
         const item = new MenuItem(opts);
         this.menu.items[2].submenu.append(item);
       });
-      tray.setContextMenu(this.menu);
+      this.tray.setContextMenu(this.menu);
     })();
-  }
-
-  get bookmark() {
-    this.menu.items[0];
   }
 
   updateBookmark() {
     (async () => {
       const bookmarks = await ReffistStore.getBookmark();
-      bookmarks.forEach(({title, url}) => {
-        const menuItem = new MenuItem({
-          label: title,
-          click() {
-            ReffistAction.createBW({url}, ReffistStore.bwOpts);
-          },
-        });
-        this.bookmark.append(menuItem);
+      bookmarks.forEach((data) => {
+        this.bookmark.append(createBookmarkItem(data));
       });
+      this.tray.setContextMenu(this.menu);
     })();
   }
 
-  addBookmark(bookmark) {}
+  addBookmark(data) {
+    this.bookmark.submenu.append(createBookmarkItem(data));
+    this.tray.setContextMenu(this.menu);
+  }
 
   deleteBookmark(id) {}
 
@@ -54,3 +49,12 @@ class TrayMenu {
 }
 
 export default TrayMenu;
+
+function createBookmarkItem({title, url}) {
+  return new MenuItem({
+    label: title,
+    click() {
+      ReffistAction.createBW({url});
+    },
+  });
+}

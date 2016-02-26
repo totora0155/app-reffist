@@ -40,10 +40,10 @@ class ReffistAction {
     })
   }
 
-  static addBookmark(bookmark) {
+  static addBookmark(data) {
     dispatcher.dispatch({
       actionType: actionType.ADD_BOOKMARK,
-      bookmark,
+      data,
     })
   }
 }
