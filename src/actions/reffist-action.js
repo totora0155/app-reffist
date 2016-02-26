@@ -1,8 +1,6 @@
 import socketIo from 'socket.io';
 import dispatcher from 'dispatcher';
-import actionType from 'constants/action-type'
-
-let _socket = null
+import actionType from 'constants/action-type';
 
 class ReffistAction {
   static setAppMenu(menuTemplate) {
@@ -19,9 +17,9 @@ class ReffistAction {
     });
   }
 
-  static addSocketListener({port}) {
+  static connectSocket({port}) {
     dispatcher.dispatch({
-      actionType: actionType.ADD_SOCKET_LISTENER,
+      actionType: actionType.CONNECT_SOCKET,
       port,
     });
   }
@@ -36,9 +34,16 @@ class ReffistAction {
 
   static changeDevice(item, targetWindow) {
     dispatcher.dispatch({
-      actionType: sctionType.CHANGE_DEVICE,
+      actionType: actionType.CHANGE_DEVICE,
       item,
       targetWindow,
+    })
+  }
+
+  static addBookmark(bookmark) {
+    dispatcher.dispatch({
+      actionType: actionType.ADD_BOOKMARK,
+      bookmark,
     })
   }
 }

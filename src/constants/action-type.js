@@ -7,6 +7,7 @@ const actionTypeConstant = keyMirror({
   CREATE_BW: null,
   CHANGE_DEVICE: null,
   ADD_BOOKMARK: null,
+  ADD_BOOKMARK: null,
   REMOVE_BOOKMARK: null,
   ADD_HISTORY: null,
   CHANGE_DEVICE: null,

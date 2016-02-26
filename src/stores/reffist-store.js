@@ -1,4 +1,4 @@
-import {Menu, Tray, BrowserWindow} from 'electron';
+import {remote ,Menu, Tray, BrowserWindow} from 'electron';
 import EventEmitter from 'events';
 import ApplicationMenu from 'menus/application/menu';
 import TrayMenu from 'menus/tray/menu';
@@ -11,8 +11,6 @@ import actionType from 'constants/action-type';
 
 // console.log(Menu);
 
-const bwData = new WeakMap();
-
 const bwDefaults = {
   width: 320,
   height: 568,
@@ -20,77 +18,51 @@ const bwDefaults = {
   resizable: false,
 }
 
+const bwOptions = new WeakMap();
+
 let _handleOpen = null;
 let _appMenu = null;
 let _trayMenu = null;
 
 class ReffistStore {
-  static addSocketListener(cb) {
-    console.log(_socket);
-    if (_socket) {
-      _socket.on('open', cb);
-    }
+  static addSocketListener(handleOpen) {
+    _handleOpen = handleOpen;
   }
 
   static get appMenu() {
     return _appMenu;
   }
 
-  static createBW({url}, assigner = {}) {
-    const opts = Object.assign(defaults, assigner);
-    let win = new BrowserWindow(opts);
-
-    win.on('closed', function() {
-      win = null;
-    });
-
-    win.loadURL(url);
-    browserwindowStore.set(win, {
-      url,
-      zoomFactor: 1,
-    });
+  static get bwDefaults() {
+    return bwDefaults;
   }
 
-  static addSocketListener(handleOpen) {
-    _handleOpen = handleOpen;
+  static get currentBWOptions() {
+    const opts = bwOptions.get(bw);
+    return opts;
   }
 
-  static removeSocketListener() {
-    _handleOpen = null;
-  }
+  // static get bwOptions(bw) {
+  //   const opts = bwOptions(bw);
+  //   return opts;
+  // }
 
-  // static getBookmark() {
-  //   getBookmark.get('bookmark');
-  // });
-  //
-  // static getHistory() {
-  //   return storage.get('histoly');
-  // }
-  //
-  // static setBookmark(data) {
-  //   return storage.set('bookmark', data);
-  // }
-  //
-  // static setHistory(data) {
-  //   return storage.set('history', data);
-  // }
-  //
-  // static getBWData(bw) {
-  //   bwMap.get(bw);
-  // }
-  //
-  // static setBWData(bw, data) {
-  //   bwMap.set(bw, data);
-  // }
+  static getBookmark() {
+    return (async () => {
+      storage.get('bookmark', (data) => {
+        console.log(data);
+      });
+      const data = await storage.get('bookmark');
+      return data;
+    })();
+  }
 }
 
 export default ReffistStore;
 
-let a = null;
-
 dispatcher.register((payload) => {
   switch (payload.actionType) {
-    case actionType.INIT_SOCKET:
+    case actionType.CONNECT_SOCKET:
       const {port} = payload;
       const {sockets} = io.listen(port);
       sockets.on('connection', (socket) => {
@@ -108,7 +80,7 @@ dispatcher.register((payload) => {
     case actionType.SET_TRAY_MENU:
       {
         const {menuTemplate} = payload
-        const _trayMenu = buildMenu(menuTemplate);
+        const _trayMenu = new TrayMenu(menuTemplate);
       }
       break;
     case actionType.CREATE_BW:
@@ -117,58 +89,38 @@ dispatcher.register((payload) => {
         createBW(data, assigner);
       }
       break;
+    case actionType.ADD_BOOKMARK:
+      {
+        const {bookmark} = payload;
+        TrayMenu.addBookmark(bookmark);
+      }
+      break;
+    case actionType.DELETE_BOOKMARK:
+      {
+        const {bookmarkId} = payload;
+        TrayMenu.deleteBookmark(bookmarkId);
+      }
+      break;
+    case actionType.SWAP_BOOKMARK:
+      {
+        const {origId, targetId} = payload;
+        TrayMenu.swapBookmark(orig, target);
+      }
+      break;
   }
 });
 
-// function connectSocket(port) {
-//   const {sockets} = io.listen(port);
-//   scokets.on('connection', (socket) => {
-//     // _socket = socket;
-//   });
-// }
-
-function buildMenu(template) {
-  Menu.buildFromTemplate(template);
-}
-
-function createAppMenu(menu) {
-  Menu.setApplicationMenu(menu);
-}
-
-function createTrayMenu(menu) {
-  const iconPath = __dirname + '/icons/tray.png';
-  const tray = new Tray(iconPath);
-  tray.setContextMenu(menu);
-  tray.setToolTip('Reffist');
-}
-
-async function getBookmarks() {
-  const bookmarksSubMenu = trayMenu.items[2].submenu;
-  const {data} = await storage.get('bookmark');
-  if (!Array.isArray(data)) return;
-
-  data.forEach(({title, url}) => {
-    const menuItem = new MenuItem({
-      label: title,
-      click() {
-        WindowAction.create({url});
-      },
-    });
-    bookmarksSubMenu.append(menuItem);
-  });
-}
-
 function createBW({url}, assigner = {}) {
   const opts = Object.assign(bwDefaults, assigner);
-  let win = new BrowserWindow(opts);
+  let bw = new BrowserWindow(opts);
+  {
+    const zoomFactor = 1;
+    bwOptions.set(bw, {url, zoomFactor});
+  }
 
-  win.on('closed', function() {
-    win = null;
+  bw.on('closed', () => {
+    bw = null;
   });
 
-  win.loadURL(url);
-  bwData.set(win, {
-    url,
-    zoomFactor: 1,
-  })
+  bw.loadURL(url);
 }

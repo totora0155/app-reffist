@@ -1,6 +1,5 @@
 import {Menu, BrowserWindow} from 'electron';
-import browserwindowStore from 'stores/browserwindow-store';
-import ReffistMenu from 'menus/reffist-menu';
+import ReffistStore from 'stores/reffist-store';
 import storage from 'electron-json-storage';
 
 const menuDevice = [
@@ -171,17 +170,20 @@ const template = [
         label: 'Add Bookmark',
         click(item, win) {
           const title = win.getTitle();
-          const {url} = browserwindowStore.get(win);
+          const {url} = ReffistStore.bwOptions;
+
+          (async () => {
+          })
           storage.get('bookmark')
             .then(({data}) => {
               const target = {title, url};
               const result = Array.isArray(data)
                              ? (data.push(target))
                              : [target];
-              storage.set('bookmark', {data: result})
-                .then((err) => {
-                  if (err) throw err;
-                });
+            //   storage.set('bookmark', {data: result})
+            //     .then((err) => {
+            //       if (err) throw err;
+            //     });
             });
         },
       },
