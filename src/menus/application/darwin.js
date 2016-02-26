@@ -19,7 +19,7 @@ const menuDevice = [
     type: 'radio',
     click(item, bw)  {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistMenu.orientation === 'portrait'
+      ReffistStore.orientation === 'portrait'
       ? bw.setSize(768 * zoomFactor, 1024 * zoomFactor)
       : bw.setSize(1024 * zoomFactor, 768 * zoomFactor);
     },
@@ -29,7 +29,7 @@ const menuDevice = [
     type: 'radio',
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistMenu.orientation === 'portrait'
+      ReffistStore.orientation === 'portrait'
       ? bw.setSize(414 * zoomFactor, 736 * zoomFactor)
       : bw.setSize(736 * zoomFactor, 414 * zoomFactor);
     },
@@ -39,7 +39,7 @@ const menuDevice = [
     type: 'radio',
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistMenu.orientation === 'portrait'
+      ReffistStore.orientation === 'portrait'
       // error!!
       // ? bw.setSize(375 * zoomFactor, 627 * zoomFactor)
       // ? bw.setSize(374 * zoomFactor, 627 * zoomFactor)
@@ -53,7 +53,7 @@ const menuDevice = [
     checked: true,
     click(item, bw) {
       const {zoomFactor} = ReffistStore.getBWData(bw);
-      ReffistMenu.orientation === 'portrait'
+      ReffistStore.orientation === 'portrait'
       ? bw.setSize(320 * zoomFactor, 568 * zoomFactor)
       : bw.setSize(568 * zoomFactor, 320 * zoomFactor);
     }
