@@ -4,10 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build:main": "webpack src/scripts/main.js main.js --progress",
-    "watch:main": "chokidar src/**/*.js -c 'npm run build:main'",
-    "start:electron": "electron main.js",
-    "start": "electron main.js"
+    "start:inspector": "node-inspector",
+    "start:debug": "electron --debug=5858 main.js",
+    "start": "gulp scripts:watch"
   },
   "repository": {},
   "keywords": [],
@@ -28,19 +27,26 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.5.0",
-    "chokidar-cli": "^1.2.0",
     "cross-env": "^1.0.7",
+    "electron-connect": "^0.3.7",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.0",
     "extract-text-webpack-plugin": "^1.0.1",
-    "npm-run-all": "^1.5.1",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "node-inspector": "^0.12.6",
+    "progress-bar-webpack-plugin": "^1.4.1",
     "webpack": "^1.12.13",
     "webpack-hot-middleware": "^2.7.1",
+    "webpack-stream": "^3.1.0",
     "webpack-target-electron-renderer": "^0.4.0"
   },
   "dependencies": {
     "electron-json-storage": "^1.1.0",
+    "flux": "^2.1.1",
     "is-url": "^1.2.1",
+    "keymirror": "^0.1.1",
+    "lodash": "^4.5.1",
     "socket.io": "^1.4.5"
   }
 }

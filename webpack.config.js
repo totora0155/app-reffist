@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -39,4 +40,7 @@ module.exports = {
       };
     })(),
   ],
+  plugins: [
+    new ProgressBarPlugin()
+  ]
 };
