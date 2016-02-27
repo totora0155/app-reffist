@@ -9,6 +9,7 @@ class TrayMenu {
   constructor(template) {
     this.menu = Menu.buildFromTemplate(template);
     this.bookmark = this.menu.items[2];
+    this.history = this.menu.items[3];
     this.tray = memory.tray = new Tray(iconPath);
     this.tray.setToolTip('Reffist');
     (async () => {
@@ -39,18 +40,23 @@ class TrayMenu {
   }
 
   addBookmark(data) {
-    this.bookmark.submenu.append(createBookmarkItem(data));
+    this.bookmark.submenu.append(createWindowItem(data));
     this.tray.setContextMenu(this.menu);
   }
 
   deleteBookmark(id) {}
 
   swapBookmark(orig, target) {}
+
+  addHistory(data) {
+    this.history.submenu.append(createWindowItem(data));
+    this.tray.setContextMenu(this.menu);
+  }
 }
 
 export default TrayMenu;
 
-function createBookmarkItem({title, url}) {
+function createWindowItem({title, url}) {
   return new MenuItem({
     label: title,
     click() {

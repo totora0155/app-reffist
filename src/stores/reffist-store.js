@@ -1,6 +1,7 @@
-import {remote ,Menu, Tray, BrowserWindow} from 'electron';
+import {app, remote ,Menu, Tray, BrowserWindow} from 'electron';
 import io from 'socket.io';
 import dispatcher from 'dispatcher';
+import ReffistAction from 'actions/reffist-action';
 import ApplicationMenu from 'menus/application/menu';
 import TrayMenu from 'menus/tray/menu';
 import actionType from 'constants/action-type';
@@ -56,7 +57,7 @@ class ReffistStore {
 
 export default ReffistStore;
 
-dispatcher.register((payload) => {
+const bwDispatchToken = dispatcher.register((payload) => {
   switch (payload.actionType) {
     case actionType.CONNECT_SOCKET:
       const {port} = payload;
@@ -67,22 +68,35 @@ dispatcher.register((payload) => {
         }
       });
       break;
+    case actionType.CREATE_BW:
+      {
+        const {data, assigner} = payload;
+        createBW(data, assigner);
+        _trayMenu.addHistory(Object.assign(data, {
+          zoomFactor: assigner.zoomFactor,
+        }));
+      }
+      break;
+  }
+});
+
+const appMenuDispatchToken = dispatcher.register((payload) => {
+  switch (payload.actionType) {
     case actionType.SET_APP_MENU:
       {
         const {menuTemplate} = payload
         _appMenu = new ApplicationMenu(menuTemplate);
       }
       break;
+  }
+});
+
+const trayMenuDispatchToken = dispatcher.register((payload) => {
+  switch (payload.actionType) {
     case actionType.SET_TRAY_MENU:
       {
         const {menuTemplate} = payload
         _trayMenu = new TrayMenu(menuTemplate);
-      }
-      break;
-    case actionType.CREATE_BW:
-      {
-        const {data, assigner} = payload;
-        createBW(data, assigner);
       }
       break;
     case actionType.ADD_BOOKMARK:
@@ -103,20 +117,25 @@ dispatcher.register((payload) => {
         _trayMenu.swapBookmark(orig, target);
       }
       break;
+    // case actionType.ADD_HISTORY:
+    //   {
+    //     const {data} = payload;
+    //     dispatcher.waitFor([bwDispatchToken]);
+    //     _trayMenu.addHistory(data);
+    //   }
+    //   break;
   }
 });
 
-function createBW({url}, assigner = {}) {
+function createBW(meta, assigner = {}) {
   const opts = Object.assign(bwDefaults, assigner);
+  const {zoomFactor} = opts;
+  const data = Object.assign(meta, {zoomFactor});
   let bw = new BrowserWindow(opts);
-  {
-    const {zoomFactor} = opts;
-    bwData.set(bw, {url, zoomFactor});
-  }
 
+  bwData.set(bw, data);
   bw.on('closed', () => {
     bw = null;
   });
-
-  bw.loadURL(url);
+  bw.loadURL(data.url);
 }
