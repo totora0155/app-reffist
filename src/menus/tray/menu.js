@@ -12,36 +12,21 @@ class TrayMenu {
     this.history = this.menu.items[3];
     this.tray = memory.tray = new Tray(iconPath);
     this.tray.setToolTip('Reffist');
-    (async () => {
-      const bookmarks = await ReffistStore.getBookmark();
-      bookmarks.forEach(({title, url}) => {
-        const opts = {
-          label: title,
-          click() {
-            ReffistAction.createBW({url});
-          },
-        };
-
-        const item = new MenuItem(opts);
-        this.menu.items[2].submenu.append(item);
-      });
-      this.tray.setContextMenu(this.menu);
-    })();
+    this.update();
   }
 
-  updateBookmark() {
-    (async () => {
-      const bookmarks = await ReffistStore.getBookmark();
-      bookmarks.forEach((data) => {
-        this.bookmark.append(createBookmarkItem(data));
-      });
+  update() {
+    Promise.all([
+      setBookmark.call(this),
+      setHistory.call(this),
+    ]).then(() => {
       this.tray.setContextMenu(this.menu);
-    })();
+    });
   }
 
   addBookmark(data) {
     this.bookmark.submenu.append(createWindowItem(data));
-    this.tray.setContextMenu(this.menu);
+    this.update();
   }
 
   deleteBookmark(id) {}
@@ -50,7 +35,7 @@ class TrayMenu {
 
   addHistory(data) {
     this.history.submenu.append(createWindowItem(data));
-    this.tray.setContextMenu(this.menu);
+    this.update();
   }
 }
 
@@ -63,4 +48,24 @@ function createWindowItem({title, url}) {
       ReffistAction.createBW({url});
     },
   });
+}
+
+function setBookmark() {
+  return (async () => {
+    const bookmarks = await ReffistStore.getBookmark();
+    bookmarks.forEach((data) => {
+      const item = createWindowItem(data)
+      this.menu.items[2].submenu.append(item);
+    });
+  })();
+}
+
+function setHistory() {
+  return (async () => {
+    const histories = await ReffistStore.getHistory();
+    histories.forEach((data) => {
+      const item = createWindowItem(data)
+      this.menu.items[3].submenu.append(item);
+    });
+  })();
 }
