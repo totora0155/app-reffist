@@ -53,6 +53,13 @@ class ReffistStore {
       return Array.isArray(data) ? data : [];
     })();
   }
+
+  static getHistory() {
+    return (async () => {
+      const {data} = await storage.get('history');
+      return Array.isArray(data) ? data : [];
+    })();
+  }
 }
 
 export default ReffistStore;
@@ -72,9 +79,16 @@ const bwDispatchToken = dispatcher.register((payload) => {
       {
         const {data, assigner} = payload;
         createBW(data, assigner);
-        _trayMenu.addHistory(Object.assign(data, {
-          zoomFactor: assigner.zoomFactor,
-        }));
+        _trayMenu.addHistory(data);
+        storage.get('history')
+          .then(({data: histories}) => {
+            if (Array.isArray(histories)) {
+              histories.unshift(data);
+              storage.set('history', {data: histories});
+            } else {
+              storage.set('history', {data: [data]});
+            }
+          });
       }
       break;
   }

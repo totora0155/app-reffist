@@ -5,6 +5,8 @@ import storage from 'electron-json-storage';
 import memory from 'memory';
 const iconPath = __dirname + '/icons/tray.png';
 
+const HISTORY_MAX_COUNT = 10;
+
 class TrayMenu {
   constructor(template) {
     this.menu = Menu.buildFromTemplate(template);
@@ -12,10 +14,10 @@ class TrayMenu {
     this.history = this.menu.items[3];
     this.tray = memory.tray = new Tray(iconPath);
     this.tray.setToolTip('Reffist');
-    this.update();
+    this.init();
   }
 
-  update() {
+  init() {
     Promise.all([
       setBookmark.call(this),
       setHistory.call(this),
@@ -25,8 +27,9 @@ class TrayMenu {
   }
 
   addBookmark(data) {
-    this.bookmark.submenu.append(createWindowItem(data));
-    this.update();
+    const item = createWindowItem(data);
+    this.bookmark.submenu.insert(0, item);
+    this.tray.setContextMenu(this.menu);
   }
 
   deleteBookmark(id) {}
@@ -34,20 +37,22 @@ class TrayMenu {
   swapBookmark(orig, target) {}
 
   addHistory(data) {
-    this.history.submenu.append(createWindowItem(data));
-    this.update();
+    const item = createWindowItem(data);
+    this.history.submenu.insert(0, item);
+    this.tray.setContextMenu(this.menu);
   }
 }
 
 export default TrayMenu;
 
 function createWindowItem({title, url}) {
-  return new MenuItem({
+  const opts = {
     label: title,
     click() {
       ReffistAction.createBW({url});
     },
-  });
+  };
+  return new MenuItem(opts);
 }
 
 function setBookmark() {
@@ -64,7 +69,7 @@ function setHistory() {
   return (async () => {
     const histories = await ReffistStore.getHistory();
     histories.forEach((data) => {
-      const item = createWindowItem(data)
+      const item = createWindowItem(data);
       this.menu.items[3].submenu.append(item);
     });
   })();
