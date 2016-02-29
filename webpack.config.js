@@ -17,14 +17,20 @@ module.exports = {
   resolve: {
     root: [
       path.resolve('src')
-    ]
+    ],
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.web-contents.js']
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
+        loader: "babel",
+      },
+      {
+        test: /\.web-contents.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: "raw!babel",
       }
     ]
   },
