@@ -15,7 +15,8 @@ const bwDefaults = {
   zoomFactor: 1,
   alwaysOnTop: true,
   resizable: false,
-  'node-integration': false,
+  nodeIntegration: false,
+  preload: __dirname + '/src/web-contents/text.js',
 };
 
 const bwData = new WeakMap();
