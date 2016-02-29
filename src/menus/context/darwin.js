@@ -1,0 +1,5 @@
+const template = [
+  {
+    label: 'test'
+  }
+];

@@ -1,3 +1,7 @@
-import electron from 'electron';
+import {ipcRenderer} from 'electron';
 
-console.log(electron);
+ipcRenderer.once('send:contextmenu', function(e, a) {
+});
+
+document.addEventListener('contextmenu', () => {
+});

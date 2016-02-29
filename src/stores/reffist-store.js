@@ -1,4 +1,4 @@
-import {app, remote ,Menu, Tray, BrowserWindow} from 'electron';
+import {app, remote ,Menu, Tray, BrowserWindow, ipcMain} from 'electron';
 import io from 'socket.io';
 import dispatcher from 'dispatcher';
 import ReffistAction from 'actions/reffist-action';
@@ -15,7 +15,8 @@ const bwDefaults = {
   zoomFactor: 1,
   alwaysOnTop: true,
   resizable: false,
-}
+  'node-integration': false,
+};
 
 const bwData = new WeakMap();
 
@@ -165,7 +166,23 @@ function createBW(meta, assigner = {}) {
   bw.webContents.on('dom-ready', () => {
     const title = bw.getTitle();
     ReffistAction.addHistory({title, url: data.url});
-    bw.webContents.executeJavaScript(webContentsScript);
-  })
+  });
+
+  bw.webContents.on('did-start-loading', () => {
+    const template = [
+      {
+        label: 'test',
+      },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    bw.webContents.executeJavaScript(webContentsScript, true, () => {
+      bw.webContents.send('ping', 'whoooooooh!');
+      bw.webContents.send('send:contextmenu', menu);
+    });
+  });
   bw.loadURL(data.url);
 }
+
+ipcMain.on('hoge', function (event, value) {
+  console.log(value);
+});
