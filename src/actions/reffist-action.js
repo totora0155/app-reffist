@@ -37,14 +37,21 @@ class ReffistAction {
       actionType: actionType.CHANGE_DEVICE,
       item,
       targetWindow,
-    })
+    });
   }
 
   static addBookmark(data) {
     dispatcher.dispatch({
       actionType: actionType.ADD_BOOKMARK,
       data,
-    })
+    });
+  }
+
+  static addHistory(data) {
+    dispatcher.dispatch({
+      actionType: actionType.ADD_HISTORY,
+      data,
+    });
   }
 }
 

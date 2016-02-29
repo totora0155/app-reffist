@@ -3,58 +3,77 @@ import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import storage from 'electron-json-storage';
 import memory from 'memory';
+import {HISTORY_MAX_COUNT} from 'constants/history';
+
 const iconPath = __dirname + '/icons/tray.png';
 
 class TrayMenu {
   constructor(template) {
     this.menu = Menu.buildFromTemplate(template);
     this.bookmark = this.menu.items[2];
+    this.history = this.menu.items[3];
     this.tray = memory.tray = new Tray(iconPath);
     this.tray.setToolTip('Reffist');
-    (async () => {
-      const bookmarks = await ReffistStore.getBookmark();
-      bookmarks.forEach(({title, url}) => {
-        const opts = {
-          label: title,
-          click() {
-            ReffistAction.createBW({url});
-          },
-        };
-
-        const item = new MenuItem(opts);
-        this.menu.items[2].submenu.append(item);
-      });
-      this.tray.setContextMenu(this.menu);
-    })();
+    this.init();
   }
 
-  updateBookmark() {
-    (async () => {
-      const bookmarks = await ReffistStore.getBookmark();
-      bookmarks.forEach((data) => {
-        this.bookmark.append(createBookmarkItem(data));
-      });
+  init() {
+    Promise.all([
+      setBookmark.call(this),
+      setHistory.call(this),
+    ]).then(() => {
       this.tray.setContextMenu(this.menu);
-    })();
+    });
   }
 
   addBookmark(data) {
-    this.bookmark.submenu.append(createBookmarkItem(data));
+    const item = createWindowItem(data);
+    this.bookmark.submenu.insert(0, item);
     this.tray.setContextMenu(this.menu);
   }
 
   deleteBookmark(id) {}
 
   swapBookmark(orig, target) {}
+
+  addHistory(data) {
+    const item = createWindowItem(data);
+    this.history.submenu.insert(0, item);
+    if (this.history.submenu.items.length > HISTORY_MAX_COUNT) {
+      this.history.submenu.items[HISTORY_MAX_COUNT].visible = false;
+    }
+    this.tray.setContextMenu(this.menu);
+  }
 }
 
 export default TrayMenu;
 
-function createBookmarkItem({title, url}) {
-  return new MenuItem({
+function createWindowItem({title, url}) {
+  const opts = {
     label: title,
     click() {
       ReffistAction.createBW({url});
     },
-  });
+  };
+  return new MenuItem(opts);
+}
+
+function setBookmark() {
+  return (async () => {
+    const bookmarks = await ReffistStore.getBookmark();
+    bookmarks.forEach((data) => {
+      const item = createWindowItem(data)
+      this.menu.items[2].submenu.append(item);
+    });
+  })();
+}
+
+function setHistory() {
+  return (async () => {
+    const histories = await ReffistStore.getHistory();
+    histories.forEach((data) => {
+      const item = createWindowItem(data);
+      this.menu.items[3].submenu.append(item);
+    });
+  })();
 }

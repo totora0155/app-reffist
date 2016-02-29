@@ -5,9 +5,9 @@ import appMenu4Darwin from 'menus/application/darwin';
 import trayMenu4Darwin from 'menus/tray/darwin';
 import memory from 'memory';
 
-import storage from 'electron-json-storage';
+// import storage from 'electron-json-storage';
 // storage.remove('bookmark');
-// storage.set('bookmark', [
+// storage.set('bookmark', {data: [
 //   {
 //     "title": "Google",
 //     "url": "https://www.google.co.jp/"
@@ -16,7 +16,18 @@ import storage from 'electron-json-storage';
 //     "title": "Yahoo",
 //     "url": "https://www.yahoo.co.jp/"
 //   }
-// ]);
+// ]});
+
+// storage.set('history', {data: [
+//   {
+//     "title": "Google",
+//     "url": "https://www.google.co.jp/"
+//   },
+//   {
+//     "title": "Yahoo",
+//     "url": "https://www.yahoo.co.jp/"
+//   }
+// ]});
 
 const PORT = 53825;
 

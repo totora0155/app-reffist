@@ -16,7 +16,11 @@ const template = [
     type: 'separator'
   },
   {
-    label: 'Bookmarks',
+    label: 'Bookmark',
+    submenu: [],
+  },
+  {
+    label: 'History',
     submenu: [],
   },
 ];

@@ -1,0 +1,1 @@
+exports.HISTORY_MAX_COUNT = 10;
