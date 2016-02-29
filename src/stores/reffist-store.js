@@ -79,20 +79,7 @@ const bwDispatchToken = dispatcher.register((payload) => {
     case actionType.CREATE_BW:
       {
         const {data, assigner} = payload;
-        createBW(data, assigner);
-        _trayMenu.addHistory(data);
-        storage.get('history')
-          .then(({data: histories}) => {
-            if (Array.isArray(histories)) {
-              histories.unshift(data);
-              if (histories.length > HISTORY_MAX_COUNT) {
-                histories.pop();
-              }
-              storage.set('history', {data: histories});
-            } else {
-              storage.set('history', {data: [data]});
-            }
-          });
+        createBW(Object.create(data), assigner);
       }
       break;
   }
@@ -135,13 +122,25 @@ const trayMenuDispatchToken = dispatcher.register((payload) => {
         _trayMenu.swapBookmark(orig, target);
       }
       break;
-    // case actionType.ADD_HISTORY:
-    //   {
-    //     const {data} = payload;
-    //     dispatcher.waitFor([bwDispatchToken]);
-    //     _trayMenu.addHistory(data);
-    //   }
-    //   break;
+    case actionType.ADD_HISTORY:
+      {
+        const {data} = payload;
+        dispatcher.waitFor([bwDispatchToken]);
+        _trayMenu.addHistory(data);
+        storage.get('history')
+          .then(({data: histories}) => {
+            if (Array.isArray(histories)) {
+              histories.unshift(data);
+              if (histories.length > HISTORY_MAX_COUNT) {
+                histories.pop();
+              }
+              storage.set('history', {data: histories});
+            } else {
+              storage.set('history', {data: [data]});
+            }
+          });
+      }
+      break;
   }
 });
 
@@ -155,5 +154,9 @@ function createBW(meta, assigner = {}) {
   bw.on('closed', () => {
     bw = null;
   });
+  bw.webContents.on('dom-ready', () => {
+    const title = bw.getTitle();
+    ReffistAction.addHistory({title, url: data.url});
+  })
   bw.loadURL(data.url);
 }

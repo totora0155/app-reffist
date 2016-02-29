@@ -47,12 +47,12 @@ class ReffistAction {
     });
   }
 
-  // static addHistory(data) {
-  //   dispatcher.dispatch({
-  //     actionType: actionType.ADD_HISTORY,
-  //     data,
-  //   });
-  // }
+  static addHistory(data) {
+    dispatcher.dispatch({
+      actionType: actionType.ADD_HISTORY,
+      data,
+    });
+  }
 }
 
 export default ReffistAction;
