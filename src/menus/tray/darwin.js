@@ -1,4 +1,6 @@
-import {Menu} from 'electron'
+import {Menu, clipboard} from 'electron';
+import isURL from 'is-url';
+import ReffistAction from 'actions/reffist-action';
 
 const template = [
   {
@@ -6,9 +8,7 @@ const template = [
     click() {
       const text = clipboard.readText();
       if (isURL(text)) {
-        WindowAction.create({
-          url: text,
-        });
+        ReffistAction.createBW({url: text});
       }
     }
   },
