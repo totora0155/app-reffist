@@ -108,6 +108,13 @@ const trayMenuDispatchToken = dispatcher.register((payload) => {
       {
         const {data} = payload;
         _trayMenu.addBookmark(data);
+        (async () => {
+          const {data: bookmarks} = await storage.get('bookmark');
+          const result = Array.isArray(bookmarks)
+                         ? (bookmarks.unshift(data))
+                         : [data];
+          await storage.set('bookmark', {data: result});
+        })();
       }
       break;
     case actionType.DELETE_BOOKMARK:

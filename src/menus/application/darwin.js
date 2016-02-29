@@ -156,15 +156,7 @@ const template = [
           const title = bw.getTitle();
           const {url} = ReffistStore.getBWData(bw);
 
-          (async () => {
-            const {data} = await storage.get('bookmark');
-            const bookmarkData = {title, url};
-            const result = Array.isArray(data)
-                           ? (data.push(bookmarkData))
-                           : [bookmarkData];
-            await storage.set('bookmark', {data: result});
-            ReffistAction.addBookmark(bookmarkData);
-          })();
+          ReffistAction.addBookmark({title, url});
         },
       },
     ],
