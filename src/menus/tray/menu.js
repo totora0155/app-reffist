@@ -3,9 +3,9 @@ import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import storage from 'electron-json-storage';
 import memory from 'memory';
-const iconPath = __dirname + '/icons/tray.png';
+import {HISTORY_MAX_COUNT} from 'constants/history';
 
-const HISTORY_MAX_COUNT = 10;
+const iconPath = __dirname + '/icons/tray.png';
 
 class TrayMenu {
   constructor(template) {
@@ -39,6 +39,9 @@ class TrayMenu {
   addHistory(data) {
     const item = createWindowItem(data);
     this.history.submenu.insert(0, item);
+    if (this.history.submenu.items.length > HISTORY_MAX_COUNT) {
+      this.history.submenu.items[HISTORY_MAX_COUNT].visible = false;
+    }
     this.tray.setContextMenu(this.menu);
   }
 }

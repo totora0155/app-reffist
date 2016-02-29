@@ -6,6 +6,7 @@ import ApplicationMenu from 'menus/application/menu';
 import TrayMenu from 'menus/tray/menu';
 import actionType from 'constants/action-type';
 import storage from 'electron-json-storage';
+import {HISTORY_MAX_COUNT} from 'constants/history';
 
 const bwDefaults = {
   width: 320,
@@ -84,6 +85,9 @@ const bwDispatchToken = dispatcher.register((payload) => {
           .then(({data: histories}) => {
             if (Array.isArray(histories)) {
               histories.unshift(data);
+              if (histories.length > HISTORY_MAX_COUNT) {
+                histories.pop();
+              }
               storage.set('history', {data: histories});
             } else {
               storage.set('history', {data: [data]});
