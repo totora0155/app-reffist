@@ -90,8 +90,5 @@ export default (bw) => {
         });
       },
     },
-    {
-      type: 'separator',
-    },
   ];
 };
