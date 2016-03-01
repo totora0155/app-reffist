@@ -8,7 +8,6 @@ import TrayMenu from 'menus/tray/menu';
 import actionType from 'constants/action-type';
 import storage from 'electron-json-storage';
 import {HISTORY_MAX_COUNT} from 'constants/history';
-import webContentsScript from 'web-contents/index'
 
 const bwDefaults = {
   width: 320,

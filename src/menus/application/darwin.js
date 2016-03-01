@@ -1,4 +1,4 @@
-import {Menu, BrowserWindow} from 'electron';
+import {Menu, BrowserWindow, ipcMain} from 'electron';
 import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import device from 'constants/device';
@@ -263,13 +263,13 @@ const template = [
       {
         label: 'Start Auto Scroll',
         click(item, bw) {
-          ipcMain.send('auto-scroll:start');
+          bw.webContents.send('auto-scroll:start');
         },
       },
       {
         label: 'End Auto Scroll',
         click(item, bw) {
-          ipcMain.send('auto-scroll:stop');
+          bw.webContents.send('auto-scroll:end');
         },
       },
     ],
