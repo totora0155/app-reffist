@@ -18,7 +18,7 @@ module.exports = {
     root: [
       path.resolve('src')
     ],
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.web-contents.js']
+    extensions: ['', '.webpack.js', '.web.js', '.js']
   },
   module: {
     loaders: [
@@ -27,11 +27,6 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: "babel",
       },
-      {
-        test: /\.web-contents.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: "raw!babel",
-      }
     ]
   },
   externals: [
