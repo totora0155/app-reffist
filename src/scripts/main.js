@@ -1,4 +1,4 @@
-import {app} from 'electron';
+import {app, ipcMain} from 'electron';
 import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import appMenu4Darwin from 'menus/application/darwin';
@@ -28,6 +28,7 @@ import memory from 'memory';
 //     "url": "https://www.yahoo.co.jp/"
 //   }
 // ]});
+//
 
 const PORT = 53825;
 
@@ -38,6 +39,7 @@ app.on('ready', () => {
   ReffistStore.addSocketListener((sendData) => {
     ReffistAction.createBW(sendData);
   });
+
   ReffistAction.connectSocket({
     port: PORT,
   });
