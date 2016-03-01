@@ -1,4 +1,5 @@
-import {app, remote ,Menu, Tray, BrowserWindow} from 'electron';
+import {app, remote ,Menu, Tray, BrowserWindow, ipcMain} from 'electron';
+import fs from 'fs';
 import io from 'socket.io';
 import dispatcher from 'dispatcher';
 import ReffistAction from 'actions/reffist-action';
@@ -14,17 +15,20 @@ const bwDefaults = {
   zoomFactor: 1,
   alwaysOnTop: true,
   resizable: false,
-}
+  nodeIntegration: false,
+  preload: __dirname + '/client.js',
+};
 
 const bwData = new WeakMap();
 
 let _handleOpen = null;
+let _handlePrintPDF = null;
 let _appMenu = null;
 let _trayMenu = null;
 
 class ReffistStore {
-  static addSocketListener(handleOpen) {
-    _handleOpen = handleOpen;
+  static addSocketListener(handler) {
+    _handleOpen = handler;
   }
 
   static get appMenu() {
@@ -161,9 +165,10 @@ function createBW(meta, assigner = {}) {
   bw.on('closed', () => {
     bw = null;
   });
-  bw.webContents.on('dom-ready', () => {
-    const title = bw.getTitle();
-    ReffistAction.addHistory({title, url: data.url});
-  })
+
   bw.loadURL(data.url);
 }
+
+ipcMain.on('client:pdf', (e, filePath, pdf) => {
+  fs.writeFile(filePath, pdf, 'utf-8', () => {});
+});

@@ -1,4 +1,4 @@
-import {Menu, BrowserWindow} from 'electron';
+import {Menu, BrowserWindow, ipcMain} from 'electron';
 import ReffistAction from 'actions/reffist-action';
 import ReffistStore from 'stores/reffist-store';
 import device from 'constants/device';
@@ -147,6 +147,8 @@ const template = [
       }
     ]
   },
+
+
   {
     label: 'Bookmark',
     submenu: [
@@ -161,6 +163,47 @@ const template = [
       },
     ],
   },
+
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
+      },
+      {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall'
+      },
+    ],
+  },
+
+
   {
     label: 'View',
     role: 'view',
@@ -213,6 +256,25 @@ const template = [
       },
     ]
   },
+
+  {
+    label: 'Control',
+    submenu: [
+      {
+        label: 'Start Auto Scroll',
+        click(item, bw) {
+          bw.webContents.send('auto-scroll:start');
+        },
+      },
+      {
+        label: 'End Auto Scroll',
+        click(item, bw) {
+          bw.webContents.send('auto-scroll:end');
+        },
+      },
+    ],
+  },
+
   {
     label: 'Help',
     role: 'help',

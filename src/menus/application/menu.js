@@ -7,8 +7,16 @@ class ApplicationMenu {
     Menu.setApplicationMenu(this.menu);
   }
 
-  get view() {
+  get edit() {
     return this.menu.items[2];
+  }
+
+  get view() {
+    return this.menu.items[3];
+  }
+
+  get control() {
+    return this.menu.items[4];
   }
 
   get orientation() {
