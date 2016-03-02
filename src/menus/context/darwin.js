@@ -1,4 +1,5 @@
-import {ipcRenderer} from 'electron';
+import {remote, ipcRenderer} from 'electron';
+const {dialog} = remote;
 
 export default (bw, data) => {
   const {position} = data;
