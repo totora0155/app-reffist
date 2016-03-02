@@ -1,5 +1,6 @@
 node_modules
 /main.js
 /client.js
+/window/config/scripts/config.js
 .DS_Store
 .node-debug*
