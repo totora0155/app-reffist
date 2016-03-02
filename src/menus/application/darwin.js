@@ -245,16 +245,33 @@ const template = [
         submenu: menuScale,
       },
       {
+        type: 'separator'
+      },
+      {
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
+        click(item, bw) {
+          bw.webContents.reload();
+        },
+      },
+      {
+        label: 'Hard Reload',
+        accelerator: 'CmdOrCtrl+Shift+R',
+        click(item, bw) {
+          bw.webContents.reloadIgnoringCache();
+        },
+      },
+      {
         type: 'separator',
       },
       {
         label: 'Develop Tool',
-        accelerator: 'Shift+CmdOrCtrl+I',
-        click(item, win) {
-          win.webContents.toggleDevTools()
+        accelerator: 'Alt+CmdOrCtrl+I',
+        click(item, bw) {
+          bw.webContents.toggleDevTools()
         },
       },
-    ]
+    ],
   },
 
   {

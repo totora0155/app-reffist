@@ -1,0 +1,110 @@
+html {
+  font: 15px/1.5 "Hiragino Maru Gothic Pro", "ヒラギノ丸ゴ Pro W4","ヒラギノ丸ゴ Pro","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","メイリオ","Meiryo","ＭＳ Ｐゴシック", Osaka, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input {
+  outline: none;
+  font-size: inherit;
+}
+
+a[role=button] {
+  cursor: pointer;
+}
+
+.config__box {
+  display: flex;
+  height: 100vh;
+}
+
+.tab__box {
+  flex-basis: 30%;
+  background: #414141;
+  color: #f8f8f8;
+}
+
+.tab__btn {
+  display: block;
+  padding: .75rem 1rem;
+}
+
+.tab__btn--active {
+  background: #015caf;
+}
+
+.form__wrapper {
+  flex-basis: 70%;
+  height: 100vh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+.form__title {
+  margin-top: 0;
+}
+
+.form__group-title {
+  margin-bottom: .5em;
+}
+
+.form__bundler {
+  margin-left: 1rem;
+}
+
+.form__block {
+  margin-bottom: 1rem;
+}
+
+.form__label {
+  display: block;
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
+
+.form__input {
+  padding: .5em;
+}
+
+.form__number {
+  width: 5em;
+}
+
+.form__radio--inline {
+  margin-right: .5em;
+}
+
+.form__accent-btn {
+  display: inline-block;
+  border-radius: 5px;
+  padding: .3em .75em;
+  margin-top: 1rem;
+  color: #fff;
+  font-size: .9em;
+  transition: .13s ease-in-out;
+  background: #015caf;
+}
+
+.form__accent-btn:hover {
+  background: #39a1ff;
+}
+
+.form__accent-btn:active {
+  background: #74bdff;
+}

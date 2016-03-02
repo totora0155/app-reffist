@@ -23,6 +23,19 @@ const template = [
     label: 'History',
     submenu: [],
   },
+  {
+    type: 'separator',
+  },
+  {
+    label: 'Config',
+    click() {
+      const configURL = 'file://' + __dirname + '/window/config/index.html'
+      ReffistAction.createBW({url: configURL}, {
+        width: 560,
+        height: 346,
+      });
+    },
+  },
 ];
 
 export default template;

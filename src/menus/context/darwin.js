@@ -1,7 +1,14 @@
 import {ipcRenderer} from 'electron';
 
-export default (bw) => {
+export default (bw, data) => {
+  const {position} = data;
   return [
+    {
+      label: 'Inspect Element',
+      click() {
+        bw.webContents.inspectElement(position.x, position.y);
+      }
+    },
     {
       label: 'Toggle the Devtool',
       click() {

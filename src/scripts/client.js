@@ -4,8 +4,14 @@ import contextTemplate from 'menus/context/darwin';
 const {Menu, clipboard, dialog} = remote;
 const bw = remote.getCurrentWindow();
 
-document.addEventListener('contextmenu', () => {
-  const menu = Menu.buildFromTemplate(contextTemplate(bw));
+document.addEventListener('contextmenu', (e) => {
+  const data = {
+    position: {
+      x: e.x,
+      y: e.y,
+    },
+  };
+  const menu = Menu.buildFromTemplate(contextTemplate(bw, data));
   menu.popup(bw);
 });
 

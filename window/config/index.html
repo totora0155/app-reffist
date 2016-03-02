@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/index.css">
+  <title>Config - Reffist</title>
+</head>
+<body>
+
+  <main class="config__box">
+    <nav class="tab__box">
+      <ul class="tab__list">
+        <li class="tab__item"><a class="tab__btn tab__btn--active" role="button">Window</a>
+        <li class="tab__item"><a class="tab__btn" role="button">Key Bind</a>
+        <li class="tab__item"><a class="tab__btn" role="button">Bookmark</a>
+        <li class="tab__item"><a class="tab__btn" role="button">History</a>
+      </ul>
+    </nav>
+
+    <div class="form__wrapper">
+      <form class="form__box">
+        <h2 class="form__title">Window</h2>
+
+        <!-- <FormGroup title="Size"></FormGroup> -->
+        <div class="form__group">
+          <h3 class="form__group-title">Size</h3>
+          <div class="form__bundler">
+            <ul class="form__list">
+              <li class="form__item">
+                <label class="form__input-wrapper">
+                  <input class="form__radio--inline" type="radio" value="iphone6Plus"
+                    name="size">iPhone6Plus
+                </label>
+              </li class="form__item">
+              <li>
+                <label class="form__input-wrapper">
+                  <input class="form__radio--inline" type="radio" value="iphone6"
+                    name="size">iPhone6
+                </label>
+              </li>
+              <li>
+                <a class="form__accent-btn" role="button">Add Size Preset</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- <FormGroup title="Position"></FormGroup> -->
+        <div class="form__group">
+          <h3 class="form__groupo-title">Position</h3>
+
+          <div class="form__bundler">
+            <div class="form__block">
+              <label for="x" class="form__label">X</label>
+              <input class="form__input form__number" type="number"
+                id="x" placeholder="15">
+            </div>
+
+            <div class="form__block">
+              <label for="y" class="form__label">Y</label>
+              <input class="form__input form__number" type="number"
+                id="y" placeholder="15">
+            </div>
+          </div>
+        </div>
+
+        <div class="form__group">
+          <div class="form__bundler">
+            <a class="form__accent-btn" role="button">Save</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- <Config></Config> -->
+
+</body>
+</html>
