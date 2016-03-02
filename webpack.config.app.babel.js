@@ -6,7 +6,7 @@ fs.readdirSync('node_modules')
   .filter(x => ['.bin'].indexOf(x) === -1)
   .forEach(mod => nodeModules[mod] = 'commonjs ' + mod);
 
-Object.assign(config, {
+Object.assign(Object.create(config), {
   target: 'electron',
   node: {
     __dirname: false,

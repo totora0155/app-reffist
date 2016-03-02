@@ -1,6 +1,6 @@
 import config from './webpack.config.base.babel';
 
-Object.assign(config, {
+Object.assign(Object.create(config), {
   target: 'web',
 });
 
