@@ -70,6 +70,8 @@ const electron = electronConnect.server.create();
   });
 }
 
+gulp.task('default', () => {process.exit(0)});
+
 
 process.on('SIGINT', () => {
   electron.stop();

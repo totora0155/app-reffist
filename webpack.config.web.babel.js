@@ -1,6 +1,8 @@
-import config from './webpack.config.base.babel';
+import _config from './webpack.config.base.babel';
 
-Object.assign(Object.create(config), {
+const config = Object.assign({}, _config);
+
+Object.assign(config, {
   target: 'web',
 });
 

@@ -1,12 +1,14 @@
 import fs from 'fs';
-import config from './webpack.config.base.babel';
+import _config from './webpack.config.base.babel';
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(x => ['.bin'].indexOf(x) === -1)
   .forEach(mod => nodeModules[mod] = 'commonjs ' + mod);
 
-Object.assign(Object.create(config), {
+const config = Object.assign({}, _config);
+
+Object.assign(config, {
   target: 'electron',
   node: {
     __dirname: false,
