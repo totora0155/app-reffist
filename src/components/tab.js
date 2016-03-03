@@ -51,7 +51,7 @@ class Tab extends React.Component {
     const lis = Tab.items.map((item) => {
       const btnClass = classNames({
         'tab__btn': true,
-        'tab__btn--active': (item.key === this.state.tab),
+        'tab__btn--active': (item.key === this.state.tab.key),
       });
 
       return (

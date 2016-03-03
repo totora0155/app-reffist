@@ -26,17 +26,17 @@ class Form extends React.Component {
 
   render() {
     const activeEl = (() => {
-      switch (this.state.tab) {
+      switch (this.state.tab.key) {
         case 'window':
-          return <Window />;
+          return <Window title={this.state.tab.name} />;
         case 'key-bind':
-          return <KeyBind />;
+          return <KeyBind title={this.state.tab.name} />;
         case 'bookmark':
-          return <Bookmark />;
+          return <Bookmark title={this.state.tab.name} />;
         case 'history':
-          return <History />;
+          return <History title={this.state.tab.name} />;
         default:
-          throw new Error('Unexpected tab name `' + this.state.tab + '`')
+          throw new Error('Unexpected tab name `' + this.state.tab.key + '`')
       }
     })();
 

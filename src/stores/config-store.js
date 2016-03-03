@@ -7,7 +7,7 @@ import Tab from 'components/tab';
 const ev = new EventEmitter();
 const CHANGE = 'CHANGE';
 
-let _currentTab = Tab.items[0].key;
+let _currentTab = Tab.items[0];
 
 class ConfigStore {
   static emitChange() {
@@ -28,7 +28,11 @@ dispatcher.register((payload) => {
     case configActionType.CHANGE_TAB:
       {
         const {tabName} = payload;
-        _currentTab = tabName;
+        const targetIdx = Array.find(Tab.items, (item) => {
+          return item.key === tabName;
+        });
+
+        _currentTab = Tab.items[targetIdx];
         ConfigStore.emitChange();
       }
       break;
