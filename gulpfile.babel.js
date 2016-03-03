@@ -46,7 +46,7 @@ const electron = electronConnect.server.create();
   gulp.task('script:config', () => {
     return gulp.src(src)
       .pipe(plumber())
-      .pipe(webpack(Object.assign(webConfig, {
+      .pipe(webpack(Object.assign(appConfig, {
         target: 'web',
         output: {
           filename: 'config.js',

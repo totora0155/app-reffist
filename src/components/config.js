@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfigStore from 'stores/config-store';
+import ReffistStore from 'stores/reffist-store';
 import Tab from 'components/tab';
 import Form from 'components/form';
 

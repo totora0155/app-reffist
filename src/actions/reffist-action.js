@@ -53,6 +53,13 @@ class ReffistAction {
       data,
     });
   }
+
+  static changeTab(tabKey) {
+    dispatcher.dispatch({
+      actionType: actionType.CHANGE_TAB,
+      tabKey,
+    });
+  }
 }
 
 export default ReffistAction;

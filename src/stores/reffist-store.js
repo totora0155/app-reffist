@@ -1,5 +1,6 @@
 import {app, remote ,Menu, Tray, BrowserWindow, ipcMain} from 'electron';
 import fs from 'fs';
+import EventEmitter from 'events';
 import io from 'socket.io';
 import dispatcher from 'dispatcher';
 import ReffistAction from 'actions/reffist-action';
@@ -8,6 +9,9 @@ import TrayMenu from 'menus/tray/menu';
 import actionType from 'constants/action-type';
 import storage from 'electron-json-storage';
 import {HISTORY_MAX_COUNT} from 'constants/history';
+import Tab from 'components/tab';
+
+const ev = new EventEmitter();
 
 const bwDefaults = {
   width: 320,
@@ -18,15 +22,27 @@ const bwDefaults = {
   nodeIntegration: false,
   preload: __dirname + '/client.js',
 };
-
 const bwData = new WeakMap();
 
 let _handleOpen = null;
 let _handlePrintPDF = null;
 let _appMenu = null;
 let _trayMenu = null;
+let _currentTab = Tab.items[0];
 
 class ReffistStore {
+  static emitChange() {
+    ev.emit(actionType.CHANGE_TAB);
+  }
+
+  static addChangeTabListener(handler) {
+    ev.on(actionType.CHANGE_TAB, handler);
+  }
+
+  static get currentTab() {
+    return _currentTab;
+  }
+
   static addSocketListener(handler) {
     _handleOpen = handler;
   }
@@ -155,6 +171,21 @@ const trayMenuDispatchToken = dispatcher.register((payload) => {
   }
 });
 
+const configDispatchToken = dispatcher.register((payload) => {
+  switch (payload.actionType) {
+    case actionType.CHANGE_TAB:
+      {
+        const {tabKey} = payload;
+        const item = Array.find(Tab.items, (item) => {
+          return item.key === tabKey;
+        });
+        _currentTab = item;
+        ReffistStore.emitChange();
+      }
+      break;
+  }
+});
+
 function createBW(meta, assigner = {}) {
   const opts = Object.assign(bwDefaults, assigner);
   const {zoomFactor} = opts;
@@ -169,6 +200,9 @@ function createBW(meta, assigner = {}) {
   bw.loadURL(data.url);
 }
 
-ipcMain.on('client:pdf', (e, filePath, pdf) => {
-  fs.writeFile(filePath, pdf, 'utf-8', () => {});
-});
+// In process side
+if (ipcMain) {
+  ipcMain.on('client:pdf', (e, filePath, pdf) => {
+    fs.writeFile(filePath, pdf, 'utf-8', () => {});
+  });
+}

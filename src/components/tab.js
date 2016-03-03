@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import ConfigAction from 'actions/config-action';
-import ConfigStore from 'stores/config-store';
+import ReffistAction from 'actions/reffist-action';
+import ReffistStore from 'stores/reffist-store';
 
 class Tab extends React.Component {
   static get items() {
@@ -31,20 +31,20 @@ class Tab extends React.Component {
 
   componentWillMount() {
     this.setState({
-      tab: ConfigStore.currentTab,
+      tab: ReffistStore.currentTab,
     });
   }
 
   componentDidMount() {
-    ConfigStore.addChangeListener(() => {
+    ReffistStore.addChangeTabListener(() => {
       this.setState({
-        tab: ConfigStore.currentTab,
+        tab: ReffistStore.currentTab,
       });
     });
   }
 
   change(e) {
-    ConfigAction.changeTab(e.target.dataset.value);
+    ReffistAction.changeTab(e.target.dataset.value);
   }
 
   render() {

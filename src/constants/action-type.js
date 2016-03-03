@@ -14,6 +14,8 @@ const actionTypeConstant = keyMirror({
   ADD_DEVICE: null,
   REMOVE_DEVICE: null,
   UPDATE_DEVICE: null,
+
+  CHANGE_TAB: null,
 });
 
 export default actionTypeConstant;

@@ -33,6 +33,7 @@ const template = [
       ReffistAction.createBW({url: configURL}, {
         width: 560,
         height: 346,
+        nodeIntegration: true,
       });
     },
   },

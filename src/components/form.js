@@ -3,7 +3,7 @@ import Window from 'components/window';
 import KeyBind from 'components/key-bind';
 import Bookmark from 'components/bookmark';
 import History from 'components/history';
-import ConfigStore from 'stores/config-store';
+import ReffistStore from 'stores/reffist-store';
 
 class Form extends React.Component {
   constructor(props) {
@@ -12,14 +12,14 @@ class Form extends React.Component {
 
   componentWillMount() {
     this.setState({
-      tab: ConfigStore.currentTab,
+      tab: ReffistStore.currentTab,
     });
   }
 
   componentDidMount() {
-    ConfigStore.addChangeListener(() => {
+    ReffistStore.addChangeTabListener(() => {
       this.setState({
-        tab: ConfigStore.currentTab,
+        tab: ReffistStore.currentTab,
       });
     });
   }
