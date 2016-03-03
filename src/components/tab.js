@@ -55,9 +55,9 @@ class Tab extends React.Component {
       });
 
       return (
-        <li className="tab__item">
-          <a role="button" data-value={item.key} key={item.key}
-            className={btnClass} onClick={this.change}
+        <li key={item.key} className="tab__item">
+          <a role="button" data-value={item.key} className={btnClass}
+            onClick={this.change}
           >{item.name}</a>
         </li>
       );
