@@ -81,6 +81,39 @@ class ReffistStore {
       return Array.isArray(data) ? data : [];
     })();
   }
+
+  static getConfig() {
+    return (async () => {
+      const config = await storage.get('config');
+      let updated = false;
+
+      if (config.size == null) {
+        config.size = 'iPhone6';
+        updated = true;
+      }
+
+      if (config.position == null) {
+        config.position = {};
+        updated = true;
+      }
+
+      if (config.position.x == null) {
+        config.position.x = null;
+        updated = true;
+      }
+
+      if (config.position.y == null) {
+        config.position.y = null;
+        updated = true;
+      }
+
+      if (updated) {
+        storage.set('config', config);
+      }
+      
+      return config;
+    })();
+  }
 }
 
 export default ReffistStore;

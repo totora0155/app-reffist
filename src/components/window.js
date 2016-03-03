@@ -1,4 +1,5 @@
 import React from 'react';
+import ReffistStore from 'stores/reffist-store';
 import FormGroup from 'components/form-group';
 
 const groups = {
@@ -6,13 +7,13 @@ const groups = {
     {
       label: 'iPhone6Plus',
       type: 'radio',
-      defaultValue: '',
+      checked: false,
       name: 'size',
     },
     {
       label: 'iPhone6',
       type: 'radio',
-      defaultValue: '',
+      checked: false,
       name: 'size',
     },
   ],
@@ -20,16 +21,19 @@ const groups = {
     {
       label: 'X',
       type: 'number',
+      value: '',
       placeholder: 15,
     },
     {
       label: 'Y',
       type: 'number',
+      value: '',
       placeholder: 15,
     },
   ],
 };
 
+// TODO: ADD preset btn
 // <li>
 //   <a className="form__accent-btn" role="button">Add Size Preset</a>
 // </li>
@@ -37,6 +41,11 @@ const groups = {
 class Window extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {groups};
+  }
+
+  componentWillMount() {
+    ReffistStore.getConfig().then(init.bind(this));
   }
 
   save() {
@@ -62,3 +71,22 @@ class Window extends React.Component {
 }
 
 export default Window
+
+function init(config) {
+  groups.size.map((item) => {
+    if (item.label === config.size) {
+      item.checked = true;
+    }
+    return item;
+  });
+
+  groups.position.map((item) => {
+    const key = item.label.toLowerCase()
+    if (config.position[key] != null) {
+      item.value = config.position[key];
+    }
+    return item;
+  });
+
+  this.setState({groups});
+}
