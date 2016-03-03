@@ -1,11 +1,13 @@
-import ConfigAction from 'actions/config-action';
-import dispatcher from 'dispatcher';
 import EventEmitter from 'events';
+import ConfigAction from 'actions/config-action';
+import configActionType from 'constants/config-action-type';
+import dispatcher from 'dispatcher';
+import Tab from 'components/tab';
 
 const ev = new EventEmitter();
 const CHANGE = 'CHANGE';
 
-let _tabName = 'window';
+let _currentTab = Tab.items[0].key;
 
 class ConfigStore {
   static emitChange() {
@@ -17,16 +19,16 @@ class ConfigStore {
   }
 
   static get currentTab() {
-    return _tabName;
+    return _currentTab;
   }
 }
 
 dispatcher.register((payload) => {
   switch (payload.actionType) {
-    case 'CHANGE_TAB':
+    case configActionType.CHANGE_TAB:
       {
         const {tabName} = payload;
-        _tabName = tabName;
+        _currentTab = tabName;
         ConfigStore.emitChange();
       }
       break;
