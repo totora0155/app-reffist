@@ -3,7 +3,6 @@ import plumber from 'gulp-plumber'
 import webpack from 'webpack-stream';
 import electronConnect from 'electron-connect';
 import appConfig from './webpack.config.app.babel';
-import webConfig from './webpack.config.web.babel';
 
 const electron = electronConnect.server.create();
 
@@ -57,7 +56,7 @@ const electron = electronConnect.server.create();
 }
 
 {
-  const src = './src/**/*.js';
+  const src = './src/**/*.+(js|jsx)';
   const dependencies = [
     'script:main',
     'script:client',

@@ -19,13 +19,18 @@ a {
   user-select: none;
 }
 
+a[role=button] {
+  cursor: pointer;
+}
+
+label {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 input {
   outline: none;
   font-size: inherit;
-}
-
-a[role=button] {
-  cursor: pointer;
 }
 
 .config__box {

@@ -7,12 +7,12 @@ export default {
     root: [
       path.resolve('src')
     ],
-    extensions: ['', '.webpack.js', '.web.js', '.js']
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.+(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel",
       },
