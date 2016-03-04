@@ -23,12 +23,14 @@ const groups = {
       type: 'number',
       value: '',
       placeholder: 15,
+      name: 'x'
     },
     {
       label: 'Y',
       type: 'number',
       value: '',
       placeholder: 15,
+      name: 'y'
     },
   ],
 };
@@ -44,14 +46,32 @@ class Window extends React.Component {
     this.state = {groups};
   }
 
-  componentWillMount() {
-    ReffistStore.getConfig().then(init.bind(this));
-  }
+  // componentWillMount() {
+    // ReffistStore.getConfig().then(config => this.setState({config});
+      // .then((config) => {
+      //   this.setState(config)
+      //   init.bind(this)
+      // });
+  // }
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log(99);
+  //   console.log(nextProps);
+  // }
 
   save() {
   }
 
+  ComponentWillMount() {
+    ReffistStore.addChangeWindowListener(() => {
+      ReffistStore.getConfig().then(init.bind(this));
+    });
+    ReffistStore.getConfig().then(init.bind(this));
+  }
+
+
   render() {
+
     return (
       <div className="form__wrapper">
         <form className="form__box" ref="form">

@@ -60,6 +60,19 @@ class ReffistAction {
       tabKey,
     });
   }
+
+  static getConfigWindow() {
+    dispatcher.dispatch({
+      actionType: actionType.GET_CONFIG_WINDOW,
+    });
+  }
+
+  static changeWindowForm(state) {
+    dispatcher.dispatch({
+      actionType: actionType.CHANGE_FORM_GROUP,
+      state,
+    });
+  }
 }
 
 export default ReffistAction;

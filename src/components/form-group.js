@@ -1,11 +1,25 @@
 import React from 'react';
+import ReffistAction from 'actions/reffist-action';
 
 class FormGroup extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
+    this.props.inputs.forEach((input) => {
+      if (input.value || input.checked) {
+        this.state[input.name] = (input.value || input.checked) && input.label;
+      } else {
+        this.state[input.name] = null;
+      }
+    });
   }
 
   change(e) {
+    const {name, value} = e.target;
+    this.setState({
+      [name]: value,
+    });
+    ReffistAction.changeWindowForm(this.state);
   }
 
   render() {
@@ -18,7 +32,7 @@ class FormGroup extends React.Component {
             <li className="form__item" key={label.toLowerCase()}>
               <label className="form__input-wrapper">
                 <input className="form__radio--inline" type="radio"
-                  name={name} checked={checked}
+                  name={name} value={label} checked={checked}
                   onChange={this.change.bind(this)} />
                 <span>{label}</span>
               </label>

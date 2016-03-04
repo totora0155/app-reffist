@@ -29,6 +29,7 @@ let _handlePrintPDF = null;
 let _appMenu = null;
 let _trayMenu = null;
 let _currentTab = Tab.items[0];
+let _configWindow = null;
 
 class ReffistStore {
   static emitChange() {
@@ -84,7 +85,10 @@ class ReffistStore {
 
   static getConfig() {
     return (async () => {
-      const config = await storage.get('config');
+      const config = _configWindow
+                     ? _configWindow
+                     : await storage.get('config');
+
       let updated = false;
 
       if (config.size == null) {
@@ -110,9 +114,17 @@ class ReffistStore {
       if (updated) {
         storage.set('config', config);
       }
-      
+
       return config;
     })();
+  }
+
+  static emitChangeFormGroup() {
+    ev.emit(actionType.CHANGE_FORM_GROUP);
+  }
+
+  static addChangeWindowListener(handler) {
+    ev.on(actionType.CHANGE_FORM_GROUP, handler);
   }
 }
 
@@ -214,6 +226,20 @@ const configDispatchToken = dispatcher.register((payload) => {
         });
         _currentTab = item;
         ReffistStore.emitChange();
+      }
+      break;
+
+    case actionType.GET_CONFIG_WINDOW:
+      {
+        console.log(1);
+      }
+      break;
+
+    case actionType.CHANGE_FORM_GROUP:
+      {
+        const {state} = payload;
+        Object.assign(_windowCofnig, state);
+        ReffistStore.emitChangeFormGroup();
       }
       break;
   }

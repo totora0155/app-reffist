@@ -16,6 +16,8 @@ const actionTypeConstant = keyMirror({
   UPDATE_DEVICE: null,
 
   CHANGE_TAB: null,
+  GET_CONFIG_WINDOW: null,
+  CHANGE_FORM_GROUP: null,
 });
 
 export default actionTypeConstant;
